@@ -37,7 +37,7 @@ Rapport is fundamental for having those discussions -it influences trust, the in
 
 """,
     variations=[
-        """ IL:\"I don't see why animal suffering matters, animals aren't intelligent.\" 
+        """ IL:\"I don't see why animal suffering matters, animals aren't intelligent.\"
         Inspiring yourself from the tip (⚙️) above, rephrase what they're saying.""",
         """IL:\"I think we shouldn't be afraid of AI.\"
       Inspiring yourself from the tip (⚙️) above, rephrase what they're saying.""",
@@ -72,16 +72,16 @@ Sometimes, the rapport might imply someone who identifies you as being part of t
 
 *Typically, values and terminal goals can be agreed upon. E.g.
 A: "I don't want to regulate AI because I want to protect the market and human innovation"
-B: "I agree that we should protect human flourishing and innovation". 
+B: "I agree that we should protect human flourishing and innovation".
 Typically, facts or parts of one’s beliefs are harder to agree on, and even so might sound misleading (e.g. “I agree that it is unclear who killed Kennedy” might imply in your interlocutor’s mind that you should therefore agree with them that person X killed Kennedy).
 
 This allows to break the erroneous outgroup depiction one person might have. If you feel there is a risk of misrepresentation, you can also mention things that you don't agree with, although in contexts where you use this technique, a lot of disagreement is already anticipated.*
 """,
     variations=[
-        """IL:"I hate progressives because they are threatening the safety of our institutions." 
+        """IL:"I hate progressives because they are threatening the safety of our institutions."
         Offer terminal affiliation.
 """,
-        """ IL:"Climate Change is fake, it's a lie that's been put out there by the global elite". 
+        """ IL:"Climate Change is fake, it's a lie that's been put out there by the global elite".
         Offer terminal affiliation.
 """,
         """ IL: I can't stand this whole lab meat research. My health is more important than their profit!
@@ -94,7 +94,7 @@ Sometimes, the rapport might imply someone who identifies you as being part of t
 ⚙️ A way to counter this is to find values that you share with your interlocutor. l call this "terminal affiliation".
 Typically, values and terminal goals can be agreed upon. E.g.
 A: I don't want to regulate AI because I want to protect the market and human innovation"
-B: "I agree that we should protect human flourishing and innovation". 
+B: "I agree that we should protect human flourishing and innovation".
 Typically, facts or parts of one’s beliefs are harder to agree on, and even so might sound misleading (e.g. “I agree that it is unclear who killed Kennedy” might imply in your interlocutor’s mind that you should therefore agree with them that person X killed Kennedy).
 
 This allows to break the erroneous outgroup depiction one person might have. If you feel there is a risk of misrepresentation, you can also mention things that you don't agree with, although in contexts where you use this technique, a lot of disagreement is already anticipated.
@@ -121,10 +121,10 @@ Note however that encouragers are not affiliation markers, they don't necessaril
 
 """,
     variations=[
-        """IL:"I hate conservatives because they're just racist." 
+        """IL:"I hate conservatives because they're just racist."
         Rephrase with an encourager.
 """,
-        """IL:"I don't think AI will become superintelligent this century, techies are just overhyped". 
+        """IL:"I don't think AI will become superintelligent this century, techies are just overhyped".
         Offer terminal affiliation.
 """,
     ],
@@ -150,22 +150,22 @@ Your task as an assistant is to provide them with feedback to improve on their r
 
 EXO_4 = Exercise(
     instructions="""
-⚙️Enumerating helps to "converge" on the cognitive level, to validate the fact that you got their point across. It's usually done by means of "Not only do you... but you also..." or "Not only because... but also because..", etc. 
+⚙️Enumerating helps to "converge" on the cognitive level, to validate the fact that you got their point across. It's usually done by means of "Not only do you... but you also..." or "Not only because... but also because..", etc.
 
 """,
     variations=[
-        """IL:"I can't stand those so-called effective charities, they don't care about economic development, they don't care about the local culture of the population they intervene on, and, like, where's my responsibility in giving them money?" 
+        """IL:"I can't stand those so-called effective charities, they don't care about economic development, they don't care about the local culture of the population they intervene on, and, like, where's my responsibility in giving them money?"
 Rephrase with enumerating.
 
 """,
-        """IL:"I'm depressed with all those regulations on fishing, it's  time lost for me and also insulting -I know my quotas, I don't need someone to check if I respect them." 
+        """IL:"I'm depressed with all those regulations on fishing, it's  time lost for me and also insulting -I know my quotas, I don't need someone to check if I respect them."
         Rephrase with enumerating.
 """,
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
 ---
-⚙️Enumerating helps to "converge" on the cognitive level, to validate the fact that you got their point across. It's usually done by means of "Not only do you... but you also..." or "Not only because... but also because..", etc. 
+⚙️Enumerating helps to "converge" on the cognitive level, to validate the fact that you got their point across. It's usually done by means of "Not only do you... but you also..." or "Not only because... but also because..", etc.
 
 ----
 Your task as an assistant is to provide them with feedback to improve on their rephrasing.
@@ -186,7 +186,7 @@ EXO_5 = Exercise(
 
 """,
     variations=[
-        """IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens." 
+        """IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens."
         Rephrase with nuanced contrasting.
 
 """,
@@ -204,11 +204,11 @@ Participants are asked to complete the following exercise:
 Your task as an assistant is to provide them with feedback to improve on their rephrasing.
 """,
     examples=[
-        ("""IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens." 
+        ("""IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens."
         Rephrase with nuanced contrasting.""",
          "So like, you think a certain amount of restriction makes sense, but not prohibit it entirely?",
          "Good!"),
-        ("""IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens." 
+        ("""IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens."
         Rephrase with nuanced contrasting.""",
          "Right, so on the one hand,  you think more regulations are needed, but on the other, you  don't think we should prohibit it entirely.",
          "Excellent!")
@@ -219,17 +219,17 @@ EXO_6 = Exercise(
     instructions="""
  Congrats! You finished section 1.
  # 2 - 📖 Optimizing Narrative Transportation
- 
+
  To access section 2, please open the following link in a new window: https://www.guidedtrack.com/programs/kwbiasj/run
  Please do not close this window, simply get back to here once you're ended, and send "Done" in the field text below. ”
 
 """,
     variations=[
         """
-        
+
 
 """,
-      
+
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
@@ -259,14 +259,14 @@ Tests point to the logical relations between the different sentences that your i
 This is **not** something questioners usually improvise on the fly. Most of the time, they draw from a "library" of tests depending on what seems most fitting. I'll try to teach you a few tests.
 
  ⚙️ First is the **Outsider Test**. This technique is good for beliefs that are usually attached to a "Me" or "Us". It consists in finding an similar case where someone would come to a different conclusion by relying on the same rationale.
- 
+
 Since tests can come off as a little upfront, you might want to add question verbs such as “I wonder whether” or “Could we say that…” to soothe it out.
 
   ”
 
 """,
     variations=[
-        """IL:"I believe in the christian God because my parents are christian." 
+        """IL:"I believe in the christian God because my parents are christian."
 Apply the Outsider Test.
 """,
 
@@ -286,12 +286,12 @@ This is not something questioners usually improvise on the fly. Most of the time
 Your task as an assistant is to provide them with feedback to improve on their rephrasing.
 """,
     examples=[
-        ("""IL:"I believe in the christian God because my parents are christian." 
+        ("""IL:"I believe in the christian God because my parents are christian."
 Apply the Outsider Test.
 """,
          "Huh, I wonder if someone with Hindu parents would say the same thing, though?",
          "Excellent!"),
-        ("""IL:"I believe in the christian God because my parents are christian." 
+        ("""IL:"I believe in the christian God because my parents are christian."
 Apply the Outsider Test.""",
          "If that's true then you should believe in Vishnu",
          "Not really. Make sure to go step-by-step, e.g. asking what it would have been like if they were born in a Hindu family. Also, you can use a question verb (e.g. I wonder if, if that's true) to make it sound nicer.")
@@ -312,7 +312,7 @@ Sometimes, sticking to the exact same topic is a bit tricky. An alternative is t
 
 """,
     variations=[
-        """IL:"Only aliens could build the pyramids, because they are so huge." 
+        """IL:"Only aliens could build the pyramids, because they are so huge."
 Question your interlocutor with a Moorean Shift.
 
 """,
@@ -336,12 +336,12 @@ Sometimes, sticking to the exact same topic is a bit tricky. An alternative is t
 Your task as an assistant is to provide them with feedback to improve on their rephrasing.
 """,
     examples=[
-        ("""IL:"Only aliens could build the pyramids, because they are so huge." 
+        ("""IL:"Only aliens could build the pyramids, because they are so huge."
 Question your interlocutor with a Moorean Shift.
 """,
          "If something is over a certain size, does it mean it has been built by aliens?",
          "Excellent!"),
-        ("""IL:"Only aliens could build the pyramids, because they are so huge." 
+        ("""IL:"Only aliens could build the pyramids, because they are so huge."
 Question your interlocutor with a Moorean Shift.""",
          "If I build a pyramid, does that mean I'm an alien?",
          "Nearly there!  The idea of you building a pyramid is a bit far-fetched, but you got the idea. You can rephrase it by using a broader category, e.g. If someone builds something very large,  does it mean they're alien?")
@@ -352,7 +352,7 @@ EXO_9 = Exercise(
     instructions="""
 ⚙️Modal Breaching ! Someone might use a weak modal, either explicitly ("I can", "one may") or implicitly ("I guess", "I think you would"). They point to a possible world that they still haven't explored yet. This consists in exploring the case where the modal is not verified.
 
-*E.g. : 
+*E.g. :
 "I'm definitely my mother's son, because, I imagine that if I make a DNA test then it'll just match my parents’".
 "Let's suppose you make the DNA test and it doesn't match. Does that influence your belief ?"*
 
@@ -360,7 +360,7 @@ EXO_9 = Exercise(
 
 """,
     variations=[
-        """IL:"I believe my father is 93 because... I guess he has a birth certificate..." 
+        """IL:"I believe my father is 93 because... I guess he has a birth certificate..."
 Make a Modal Breach.
 
 
@@ -374,19 +374,19 @@ Tests point to the logical relations between the different sentences that your i
 
 ⚙️Modal Breaching ! Someone might use a weak modal, either explicitly ("I can", "one may") or implicitly ("I guess", "I think you would"). They point to a possible world that they still haven't explored yet. This consists in exploring the case where the modal is not verified.
 
-E.g. : 
+E.g. :
 "I'm definitely my mother's son, because, I imagine that if I make a DNA test then it'll just match my parents’".
 "Let's suppose you make the DNA test and it doesn't match. Does that influence your belief ?"
 ----
 Your task as an assistant is to provide them with feedback to improve on their rephrasing.
 """,
     examples=[
-        ("""IL:"I believe my father is 93 because... I guess he has a birth certificate..." 
+        ("""IL:"I believe my father is 93 because... I guess he has a birth certificate..."
 Make a Modal Breach.
 """,
          "What if his birth certificate says something different, or record keeping in his country’s inaccurate? Would you still think he’s 93?",
          "Excellent!"),
-        ("""IL:"I believe my father is 93 because... I guess he has a birth certificate..." 
+        ("""IL:"I believe my father is 93 because... I guess he has a birth certificate..."
 Make a Modal Breach.
 """,
          "But you can't be sure, right?",
@@ -413,7 +413,7 @@ You don't need to limit yourself to these uses, of course. Most of the time, you
 
 """,
     variations=[
-        """IL:"All conservatives want to implement racist laws." 
+        """IL:"All conservatives want to implement racist laws."
 Make a Transfer.
 
 
@@ -435,12 +435,12 @@ You don't need to limit yourself to these uses, of course. Most of the time, you
 Your task as an assistant is to provide them with feedback to improve on their rephrasing.
 """,
     examples=[
-        ("""IL:"All conservatives want to implement racist laws." 
+        ("""IL:"All conservatives want to implement racist laws."
 Make a Transfer.
 """,
          "If I introduce you to someone who is against racist laws, you’d be able to infer they’re not conservative?",
          "Excellent!"),
-        ("""IL:"All conservatives want to implement racist laws." 
+        ("""IL:"All conservatives want to implement racist laws."
 Make a Transfer.
 """,
          "So does that mean the Soviets (who implemented racist laws) were conservative?",
@@ -459,7 +459,7 @@ E.g :
 
 """,
     variations=[
-        """IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg." 
+        """IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
 Ask for a false positive.
 """,
 
@@ -478,12 +478,12 @@ E.g :
 Your task as an assistant is to provide them with feedback to improve on their rephrasing.
 """,
     examples=[
-        ("""IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg." 
+        ("""IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
 Ask for a false positive.
 """,
          "Can you think of a morning where you didn’t eat berries, and yet you weighed between 50 and 53 kgs?",
          "Excellent!"),
-        ("""IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg." 
+        ("""IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
 Ask for a false positive.
 """,
          "Do you remember a time when you ate berries and were not in that weight range?",
@@ -496,13 +496,13 @@ EXO_12 = Exercise(
 #5 - 🎯 Managing Topics
 Topics are the structure of your interlocutor's belief woven into conversation. Any of these topics usually have several versions of them, so you might ask for the "strongest", "most important", "main", or "most vivid" ones at each conversational step.
 
-Here is a way (among other) to describe the typical structure you’ll encounter : 
+Here is a way (among other) to describe the typical structure you’ll encounter :
 (image)
 C refers to the Claim : “I believe in God”. This is when you usually try to clear up definitions.
 
 D is the Data : “I had a spiritual experience, once”. You often need to ask for an example at this point.
 
-W is the Warrant, the link that justified inferring the Claim from the Data : 
+W is the Warrant, the link that justified inferring the Claim from the Data :
 E.g. : “Spiritual experiences reveal deeper truth than science or logic”.
 
 R is the Rebuttal : “Unless if the spiritual experience was induced by a drug or something but I don’t think it was the case”.
@@ -510,24 +510,24 @@ R is the Rebuttal : “Unless if the spiritual experience was induced by a drug 
 B is the Backing
 Backing can exist for both Data (“I was 13. I was praying with my aunt in a church…”) and the Warrant (“I actually read a book titled “The book of the Shaman…”)
 
-Most importantly, we want two things : 
+Most importantly, we want two things :
 1-Get to the right Data. Data sometimes has another Data behind it, and so on and so forth. You want to get to a concrete Data.
 2-Once you have the right data, *Get to the Warrant and stick to it !* This is where the interlocutor’s epistemology happens, so be wary of falling inside unrelated Claims, optional Data, or unnecessarily detailed Backings.
 """,
     variations=[
-        """IL:"Cool, I'm open for a discussion." 
+        """IL:"Cool, I'm open for a discussion."
 Ask for a claim.
 """,
       """IL:"I believe in Karma."
 Ask for Data.
       """,
-      """IL:"I believe in Karma because I just experience it everyday." 
+      """IL:"I believe in Karma because I just experience it everyday."
 Ask for an example.
       """,
       """IL:"Like, yesterday, I mentally insulted someone, and a few minutes later, my foot hit a table corner."
 Ask for a Warrant… in an appropriate way.
       """,
-      """IL:"I believe this incident was Karma." 
+      """IL:"I believe this incident was Karma."
 Ask for a rebuttal.
       """,
 
@@ -537,13 +537,13 @@ Participants are asked to complete the following exercise:
 ---
 Topics are the structure of your interlocutor's belief woven into conversation. Any of these topics usually have several versions of them, so you might ask for the "strongest", "most important", "main", or "most vivid" ones at each conversational step.
 
-Here is a way (among other) to describe the typical structure you’ll encounter : 
+Here is a way (among other) to describe the typical structure you’ll encounter :
 (image)
 C refers to the Claim : “I believe in God”. This is when you usually try to clear up definitions.
 
 D is the Data : “I had a spiritual experience, once”. You often need to ask for an example at this point.
 
-W is the Warrant, the link that justified inferring the Claim from the Data : 
+W is the Warrant, the link that justified inferring the Claim from the Data :
 E.g. : “Spiritual experiences reveal deeper truth than science or logic”.
 
 R is the Rebuttal : “Unless if the spiritual experience was induced by a drug or something but I don’t think it was the case”.
@@ -551,24 +551,24 @@ R is the Rebuttal : “Unless if the spiritual experience was induced by a drug 
 B is the Backing
 Backing can exist for both Data (“I was 13. I was praying with my aunt in a church…”) and the Warrant (“I actually read a book titled “The book of the Shaman…”)
 
-Most importantly, we want two things : 
+Most importantly, we want two things :
 1-Get to the right Data. Data sometimes has another Data behind it, and so on and so forth. You want to get to a concrete Data.
 2-Once you have the right data, Get to the Warrant and stick to it !This is where the interlocutor’s epistemology happens, so be wary of falling inside unrelated Claims, optional Data, or unnecessarily detailed Backings.
 ----
 Your task as an assistant is to provide them with feedback to improve on their rephrasing.
 """,
     examples=[
-        ("""IL:"Cool, I'm open for a discussion." 
+        ("""IL:"Cool, I'm open for a discussion."
 Ask for a claim.
 """,
          "Nice! Is there any belief that you hold that you'd want to talk about?",
-         "Excellent!",
-        """IL:"I believe in Karma."
+         "Excellent!"),
+        ("""IL:"I believe in Karma."
 Ask for Data.
 """,
          "Why do you believe in Karma?",
-         "Good, but imprecise: try to ask for the main reason why they believe in Karma",
-        """IL:"I believe in Karma."
+         "Good, but imprecise: try to ask for the main reason why they believe in Karma"),
+        ("""IL:"I believe in Karma."
 Ask for Data.
 """,
           "What do you mean by Karma?",
@@ -664,7 +664,24 @@ def get_openai_feedback(original: str, submission: str, exo: Exercise) -> str | 
 def admin_panel():
     st.button("Wipe database", on_click=lambda: db().clear())
     use_openai = st.toggle("Use OpenAI", False)
-    st.write(db())
+    with st.expander("Database"):
+        st.write(db())
+
+    with st.expander("Preview exercises"):
+        for exo in EXERCISES:
+            st.write(exo.instructions)
+            for i, v in enumerate(exo.variations):
+                st.markdown(f"## {i+1}. {v}")
+                st.text_input("Answer", disabled=True, key=v)
+
+                st.write("System prompt")
+                st.code(exo.system_prompt)
+                for orig, sub, feedback in exo.examples:
+                    st.write("Example")
+                    st.code(f"Original: {orig}\nRephrase: {sub}")
+                    st.write("Feedback")
+                    st.code(feedback)
+
 
     st.write("# Feedback panel")
 
@@ -693,8 +710,8 @@ def admin_panel():
                                     value=default,
                                     height=250,
                                     key=q.uid)
-            st.form_submit_button("Send")
-        if new_msg:
+            submit = st.form_submit_button("Send")
+        if new_msg and submit:
             q.messages.append(Message(TEACHER_NAME, new_msg))
             st.rerun()
 
@@ -737,7 +754,7 @@ def main():
 
             with st.container():
                 st.write(q.fmt_messages(user))
-                if len(q.messages) != 1 and (new := st.chat_input(key=f"chat-{i}")):
+                if len(q.messages) != 1 and (new := st.chat_input(key=f"chat-{q.uid}")):
                     q.messages.append(Message(user, new))
                     st.rerun()
 
