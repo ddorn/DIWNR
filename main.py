@@ -1,5 +1,8 @@
 from copy import deepcopy
 from dataclasses import field, dataclass
+from datetime import datetime
+import json
+from pathlib import Path
 from time import sleep, time
 import uuid
 import streamlit as st
@@ -9,7 +12,16 @@ from openai.types.chat import ChatCompletionMessageParam
 
 #MODEL="gpt-4-0125-preview"
 MODEL = "gpt-3.5-turbo-0125"
+MODELS = [
+    None,
+    "gpt-3.5-turbo-0125",
+    "gpt-4-0125-preview",
+]
 TEACHER_NAME = "Camille"
+
+BACKUP_DIR = Path("backups")
+BACKUP_DIR.mkdir(exist_ok=True)
+BACKUP_FREQUENCY = 5 * 60 # seconds
 
 
 @dataclass
@@ -37,10 +49,10 @@ Rapport is fundamental for having those discussions -it influences trust, the in
 
 """,
     variations=[
-        """ IL:\"I don't see why animal suffering matters, animals aren't intelligent.\"
-        Inspiring yourself from the tip (⚙️) above, rephrase what they're saying.""",
-        """IL:\"I think we shouldn't be afraid of AI.\"
-      Inspiring yourself from the tip (⚙️) above, rephrase what they're saying.""",
+        """IL: "I don't see why animal suffering matters, animals aren't intelligent."
+Inspiring yourself from the tip (⚙️) above, rephrase what they're saying.""",
+        """IL: "I think we shouldn't be afraid of AI."
+Inspiring yourself from the tip (⚙️) above, rephrase what they're saying.""",
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
@@ -222,7 +234,7 @@ EXO_6 = Exercise(
  # 2 - 📖 Optimizing Narrative Transportation
 
  To access section 2, please open the following link in a new window: https://www.guidedtrack.com/programs/kwbiasj/run
- Please do not close this window, simply get back to here once you're ended, and send "Done" in the field text below. 
+ Please do not close this window, simply get back to here once you're ended, and send "Done" in the field text below.
 
 """,
     variations=[
@@ -575,7 +587,7 @@ Welcome to the harder part of the workshop !
 
 Data Transformation is the key pattern behind eliciting pauses for reflection in your interlocutor’s attitude. It is the spice that transforms your dialog into a rational one. So what is it?
 
-Data refers to the answer to the question “Why”, the main reason behind an IL’s beliefs. (“Why do you believe in God ?”). Transformation refers to the act of taking this Data and ever-so-slightly modifying it (it has to stay compatible with the Warrant!). Let’s take an example : 
+Data refers to the answer to the question “Why”, the main reason behind an IL’s beliefs. (“Why do you believe in God ?”). Transformation refers to the act of taking this Data and ever-so-slightly modifying it (it has to stay compatible with the Warrant!). Let’s take an example :
 
 Claim : “I believe in Karma.”
 Data : “When I do something bad, like littering, I get karmically punished during the day -I’ll break a nail, for example”. (Implicit Warrant : I can trust my personal experiences)
@@ -595,40 +607,40 @@ These moves are key to a successful conversation when it bears on matter-of-fact
         """IL:"I believe in Jehovah, because what is in the Bible is true. Unlike science, it never changes -e.g, the bible says Babylon shall not be rebuilt, and it sits in ruins until today."
 Transform this data. I will roleplay the IL if needed.
 """,
-        """IL:"Universal Basic Income isn’t plausible enough to be worth trying. I don't trust idealists and goody-two-shoes. I trust realists, like Margaret Thatcher." 
+        """IL:"Universal Basic Income isn’t plausible enough to be worth trying. I don't trust idealists and goody-two-shoes. I trust realists, like Margaret Thatcher."
       Transform this data. I will roleplay the IL if needed.
 """,
-      """IL:"Veganism would require a huge shift in specialization for the existing animal agriculture workforce, and the government can’t pay for it enough.” 
+      """IL:"Veganism would require a huge shift in specialization for the existing animal agriculture workforce, and the government can’t pay for it enough.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"Video Games increase human interactions. They’re a very good way to organically meet new people and invite them home.” 
+      """IL:"Video Games increase human interactions. They’re a very good way to organically meet new people and invite them home.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"Aliens don’t exist. We have tried to reach out to them several times, and we never received an answer.” 
+      """IL:"Aliens don’t exist. We have tried to reach out to them several times, and we never received an answer.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"Universal Basic Income isn’t plausible enough to be worth trying. I don't trust idealists and goody-two-shoes. I trust realists, like Margaret Thatcher." 
+      """IL:"Universal Basic Income isn’t plausible enough to be worth trying. I don't trust idealists and goody-two-shoes. I trust realists, like Margaret Thatcher."
             Transform this data. I will roleplay the IL if needed.
       """,
       """IL:"AI is useful for improving the justice system. Did you hear about that guy in Brighton who wrote an appeal for an unfair fine using ChatGPT ?”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"I defend AI because I’m in favor of freedom. AI helps with accessing and synthesizing information to make democratic decisions.” 
+      """IL:"I defend AI because I’m in favor of freedom. AI helps with accessing and synthesizing information to make democratic decisions.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"We can’t possibly live in a simulation: it would require such amounts of time, energy and compute, no one would actually create such a project.” 
+      """IL:"We can’t possibly live in a simulation: it would require such amounts of time, energy and compute, no one would actually create such a project.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"Mandatory vaccines weren’t a big factor in ending the Covid-19 pandemic. Vaccines aren’t 100% effective.” 
+      """IL:"Mandatory vaccines weren’t a big factor in ending the Covid-19 pandemic. Vaccines aren’t 100% effective.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"Any risk of extinction is a century off. Extinction risks are not nearly as important an issue as any other for now.” 
+      """IL:"Any risk of extinction is a century off. Extinction risks are not nearly as important an issue as any other for now.”
             Transform this data. I will roleplay the IL if needed.
       """,
       """IL:"GMOs are dangerous, since contamination threatens biodiversity.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """"UFOs are actually interdimensional beings. That’s why they seem to defy physics.” 
+      """"UFOs are actually interdimensional beings. That’s why they seem to defy physics.”
             Transform this data. I will roleplay the IL if needed.
       """,
     ],
@@ -637,7 +649,7 @@ Participants are asked to complete the following exercise:
 ---
 Data Transformation is the key pattern behind eliciting pauses for reflection in your interlocutor’s attitude. It is the spice that transforms your dialog into a rational one. So what is it?
 
-Data refers to the answer to the question “Why”, the main reason behind an IL’s beliefs. (“Why do you believe in God ?”). Transformation refers to the act of taking this Data and ever-so-slightly modifying it (it has to stay compatible with the Warrant!). Let’s take an example : 
+Data refers to the answer to the question “Why”, the main reason behind an IL’s beliefs. (“Why do you believe in God ?”). Transformation refers to the act of taking this Data and ever-so-slightly modifying it (it has to stay compatible with the Warrant!). Let’s take an example :
 
 Step 1: Identify the topics
 Claim : “I believe in Karma.”
@@ -735,7 +747,7 @@ def wait_feedback(question: Question):
 
 
 @st.cache_data()
-def get_openai_feedback(original: str, submission: str, exo: Exercise) -> str | None:
+def get_openai_feedback(original: str, submission: str, exo: Exercise, model: str) -> str | None:
 
     def fmt(orig: str, sub: str):
         return f"Original: {orig}\nRephrase: {sub}"
@@ -746,7 +758,7 @@ def get_openai_feedback(original: str, submission: str, exo: Exercise) -> str | 
         examples.append({"role": "assistant", "content": feedback})
 
     response = openai.chat.completions.create(
-        model=MODEL,
+        model=model,
         messages=[
             {"role": "system", "content": exo.system_prompt},
             *examples,
@@ -758,9 +770,21 @@ def get_openai_feedback(original: str, submission: str, exo: Exercise) -> str | 
 
 
 def admin_panel():
-    st.button("Wipe database", on_click=lambda: db().clear())
-    use_openai = st.toggle("Use OpenAI", False)
+    model = st.selectbox("OpenAI model", MODELS)
+
     with st.expander("Database"):
+        st.button("Wipe database", on_click=lambda: db().clear())
+        backups = sorted(BACKUP_DIR.iterdir(), reverse=True)
+        if backups:
+            labeled_backups = {
+                file: datetime.fromtimestamp(int(file.stem)).strftime("%H:%M %Y-%m-%d")
+                for file in backups
+            }
+            file = st.select_slider("Database to load", list(labeled_backups.values()))
+
+            st.button(f"⚠ Load backup from {file}", on_click=lambda: db().clear() or db().update(json.loads(file.read_text())))
+        else:
+            st.write("No backups yet")
         st.write(db())
 
     with st.expander("Preview exercises"):
@@ -790,16 +814,12 @@ def admin_panel():
 """)
         st.write(q.fmt_messages(TEACHER_NAME))
 
-        if q.never_got_feedback and use_openai:
-            default = get_openai_feedback(q.original, q.messages[0].content, q.exo)
+        if q.never_got_feedback and model:
+            default = get_openai_feedback(q.original, q.messages[0].content, q.exo, model)
         elif q.never_got_feedback:
-            default = "I dunno man, just work on it"
+            default = ""
         else:
             default = ""
-
-        # new_msg = st.chat_input("Feedback", key=q.uid)
-        # if not new_msg and default:
-            # st.session_state[q.uid] = default
 
         with st.form(key=f"form-{q.uid}"):
             new_msg = st.text_area("Feedback",
@@ -811,6 +831,11 @@ def admin_panel():
             q.messages.append(Message(TEACHER_NAME, new_msg))
             st.rerun()
 
+    # Backup the database every 3 minutes
+    last_backup = max(BACKUP_DIR.iterdir(), default=None)
+    if last_backup is None or time() - last_backup.stat().st_mtime > BACKUP_FREQUENCY:
+        (BACKUP_DIR / f"{int(time())}.json").write_text(json.dumps(db()))
+
     # Check for new questions every second
     old_db = deepcopy(db())
     while True:
@@ -821,7 +846,6 @@ def admin_panel():
 
 def main():
     user = st.session_state.get("user")
-    # st.write(f"{user!r}")
 
     if user is None:
         # Prompt for user name
@@ -860,6 +884,14 @@ def main():
         else:
             continue
         break
+
+    with st.sidebar:
+        for exo, qs in zip(EXERCISES, db()[user]):
+            # First line with a # is the title
+            header = next((line for line in exo.instructions.splitlines() if line.startswith("#")), "no header")
+            st.write(header)
+            if any(q.never_got_feedback for q in qs):
+                break
 
     # Check for new messages every second
     past_msgs = deepcopy(db()[user])
