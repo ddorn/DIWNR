@@ -7,7 +7,7 @@ import openai
 from openai.types.chat import ChatCompletionMessageParam
 
 
-# MODEL="gpt-4-0125-preview"
+#MODEL="gpt-4-0125-preview"
 MODEL = "gpt-3.5-turbo-0125"
 TEACHER_NAME = "Camille"
 
@@ -26,10 +26,10 @@ class Exercise:
 
 EXO_1 = Exercise(
     instructions="""
-**For all the following exercices, you’re invited to always put yourself in the shoes of the Questioner. You’ll need to give an answer to something the interlocutor (IL) has said, while applying the tip (⚙️) you're given. Pretend to be in a *live conversation*.**
+**For all the following exercices, you’re invited to always put yourself in the shoes of the Questioner. You’ll need to give an answer to something the interlocutor (IL) has said, while applying the tip (⚙️) you're given. Pretend to be in a *live conversation*. You can also combine the tips as you learn them along the way.**
 
 # 1 - 🎯 Optimizing Rapport Management
-Rapport is fundamental for having those discussions -it influences trust, the interpretation of what you're saying, and the ability to coherentize one's belief system.
+Rapport is fundamental for having those discussions -it influences trust, the interpretation of what you're saying, and the ability to coherentize one's belief system. More importantly, if you're facing someone who is angry, spending time on the following techniques will allow you to calm the discussion down.
 
 ⚙️ A good way to improve rapport is simply **rephrasing what your interlocutor has just said**. Make sure to include the **emotions** they mention, and to ask  **whether you got it right**. (e.g “don’t hesitate to tell me if I’m wrong). Try to stick to what they said, do not presume too much.
 
@@ -51,7 +51,7 @@ Rapport is fundamental for having those discussions -it influences trust, the in
 ⚙️ A good way to improve rapport is simply rephrasing what your interlocutor has just said. Make sure to include the emotions they mention, and to ask whether you got it right. (e.g “don’t hesitate to tell me if I’m wrong). Try to stick to what they said, do not presume too much.
 This allows to make sure that you've understood them. It also forces you to pay more attention to what they're saying. Finally, it also avoids to incorrectly "ground": to signal that your interlocutor can proceed to the next point, despite the fact that you didn't understand.
 ----
-Your task as an assistant is to provide them with feedback to improve on their rephrasing.
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
         ("I don't see why AI would be dangerous, it's not that powerful.",
@@ -70,22 +70,23 @@ Sometimes, the rapport might imply someone who identifies you as being part of t
 
 ⚙️ A way to counter this is to **find values that you share** with your interlocutor. l call this **"terminal affiliation"**.
 
-*Typically, values and terminal goals can be agreed upon. E.g.
-A: "I don't want to regulate AI because I want to protect the market and human innovation"
-B: "I agree that we should protect human flourishing and innovation".
-Typically, facts or parts of one’s beliefs are harder to agree on, and even so might sound misleading (e.g. “I agree that it is unclear who killed Kennedy” might imply in your interlocutor’s mind that you should therefore agree with them that person X killed Kennedy).
+*Typically, values and terminal goals can be agreed upon. E.g.*
 
-This allows to break the erroneous outgroup depiction one person might have. If you feel there is a risk of misrepresentation, you can also mention things that you don't agree with, although in contexts where you use this technique, a lot of disagreement is already anticipated.*
+*A: "I don't want to regulate AI because I want to protect the market and human innovation"*
+
+*B: "I agree that we should protect human flourishing and innovation".*
+
+Usually, facts or parts of one’s beliefs are harder to agree on, and even so might sound misleading (e.g. “I agree that it is unclear who killed Kennedy” might imply in your interlocutor’s mind that you should therefore agree with them that person X killed Kennedy).*
+
+This allows to break the erroneous outgroup depiction one person might have. If you feel there is a risk of misrepresentation, you can also mention things that you don't agree with, although in contexts where you use this technique, a lot of disagreement is already anticipated.
 """,
     variations=[
         """IL:"I hate progressives because they are threatening the safety of our institutions."
-        Offer terminal affiliation.
-""",
+        Offer terminal affiliation.""",
         """ IL:"Climate Change is fake, it's a lie that's been put out there by the global elite".
-        Offer terminal affiliation.
-""",
+        Offer terminal affiliation.""",
         """ IL: I can't stand this whole lab meat research. My health is more important than their profit!
-        Offer terminal affiliation"""
+        Offer terminal affiliation."""
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
@@ -99,7 +100,7 @@ Typically, facts or parts of one’s beliefs are harder to agree on, and even so
 
 This allows to break the erroneous outgroup depiction one person might have. If you feel there is a risk of misrepresentation, you can also mention things that you don't agree with, although in contexts where you use this technique, a lot of disagreement is already anticipated.
 ----
-Your task as an assistant is to provide them with feedback to improve on their rephrasing.
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Please be concise.
 """,
     examples=[
         ("I hate progressives because they are threatening the safety of our institutions.",
@@ -136,7 +137,7 @@ It signals that you've paid attention to what they've been saying, and that you 
 Note however that encouragers are not affiliation markers, they don't necessarily signal that you agree ! Rather, they signal that you "converge", that you jointly pay attention to what they pay attention to. In some languages, the encourager for "yes, I follow you" and the affiliation marker for "yes, I agree" are two different words.
 
 ----
-Your task as an assistant is to provide them with feedback to improve on their rephrasing.
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
         ("I hate conservatives because they're just racist.",
@@ -150,7 +151,7 @@ Your task as an assistant is to provide them with feedback to improve on their r
 
 EXO_4 = Exercise(
     instructions="""
-⚙️Enumerating helps to "converge" on the cognitive level, to validate the fact that you got their point across. It's usually done by means of "Not only do you... but you also..." or "Not only because... but also because..", etc.
+⚙️**Enumerating** helps to "converge" on the cognitive level, to validate the fact that you got their point across. It's usually done by means of "Not only do you... but you also..." or "Not only because... but also because..", etc.
 
 """,
     variations=[
@@ -168,7 +169,7 @@ Participants are asked to complete the following exercise:
 ⚙️Enumerating helps to "converge" on the cognitive level, to validate the fact that you got their point across. It's usually done by means of "Not only do you... but you also..." or "Not only because... but also because..", etc.
 
 ----
-Your task as an assistant is to provide them with feedback to improve on their rephrasing.
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
         ("I can't stand those so-called effective charities, they don't care about economic development, they don't care about the local culture of the population they intervene on, and, like, where's my responsibility in giving them money?",
@@ -182,7 +183,7 @@ Your task as an assistant is to provide them with feedback to improve on their r
 
 EXO_5 = Exercise(
     instructions="""
- ⚙️ Including the nuances your interlocutor mention are also very welcome. E.g: “On one side, you think that X, but on the other side, you also think that Y.”
+ ⚙️ **Including the nuances** your interlocutor mention are also very welcome. E.g: “On one side, you think that X, but on the other side, you also think that Y.”
 
 """,
     variations=[
@@ -201,15 +202,15 @@ Participants are asked to complete the following exercise:
 ⚙️ Including the nuances your interlocutor mention are also very welcome. E.g: “On one side, you think that X, but on the other side, you also think that Y.”
 
 ----
-Your task as an assistant is to provide them with feedback to improve on their rephrasing.
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
         ("""IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens."
-        Rephrase with nuanced contrasting.""",
+        Rephrase while mentionning and possibly contrasting the nuances.""",
          "So like, you think a certain amount of restriction makes sense, but not prohibit it entirely?",
          "Good!"),
         ("""IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens."
-        Rephrase with nuanced contrasting.""",
+        Rephrase while mentionning and possibly contrasting the nuances.""",
          "Right, so on the one hand,  you think more regulations are needed, but on the other, you  don't think we should prohibit it entirely.",
          "Excellent!")
     ]
@@ -221,15 +222,12 @@ EXO_6 = Exercise(
  # 2 - 📖 Optimizing Narrative Transportation
 
  To access section 2, please open the following link in a new window: https://www.guidedtrack.com/programs/kwbiasj/run
- Please do not close this window, simply get back to here once you're ended, and send "Done" in the field text below. ”
+ Please do not close this window, simply get back to here once you're ended, and send "Done" in the field text below. 
 
 """,
     variations=[
-        """
-
-
+        """Send "Done" when finished.
 """,
-
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
@@ -261,9 +259,6 @@ This is **not** something questioners usually improvise on the fly. Most of the 
  ⚙️ First is the **Outsider Test**. This technique is good for beliefs that are usually attached to a "Me" or "Us". It consists in finding an similar case where someone would come to a different conclusion by relying on the same rationale.
 
 Since tests can come off as a little upfront, you might want to add question verbs such as “I wonder whether” or “Could we say that…” to soothe it out.
-
-  ”
-
 """,
     variations=[
         """IL:"I believe in the christian God because my parents are christian."
@@ -283,7 +278,7 @@ This is not something questioners usually improvise on the fly. Most of the time
  Since tests can come off as a little upfront, you might want to add question verbs such as “I wonder whether” or “Could we say that…” to soothe it out.
 
 ----
-Your task as an assistant is to provide them with feedback to improve on their rephrasing.
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
         ("""IL:"I believe in the christian God because my parents are christian."
@@ -298,23 +293,23 @@ Apply the Outsider Test.""",
     ]
 )
 
-EXO_8 = Exercise(
+EXO_X = Exercise(
     instructions="""
-⚙️Another test is the Moorean Shift. It simply consists of exploiting the logical equivalence A -> B => ~B -> ~A. This also induces a topic-shift.
+⚙️Another test is the Moorean Shift. It simply consists of exploiting the logical equivalence A → B ⇒ ¬B → ¬A. This also induces a topic-shift.
 
 E.g (courtesy of EY) :
+
 *"Only God can build an A.I (this implies : If you are not God, you cannot build an AI)
+
 -If I build an AI, does that mean I'm God ?"*
+
 Notice the conversations switches from being about AI onto being about God, so make sure the result does orient you towards the topic you aim for.
 Sometimes, sticking to the exact same topic is a bit tricky. An alternative is to select a broader category:
 *-If I build something more advanced than a human, does that mean I'm superhuman?*
-  ”
-
 """,
     variations=[
         """IL:"Only aliens could build the pyramids, because they are so huge."
 Question your interlocutor with a Moorean Shift.
-
 """,
 
     ],
@@ -323,7 +318,7 @@ Participants are asked to complete the following exercise:
 ---
 Tests point to the logical relations between the different sentences that your interlocutor said. Due to the fact that interlocutors are more convinced by the inferences they draw themselves rather than the information they're being given directly, your goal is to help them make the right inferences -i.e logical or bayesian ones- by relying on elements they themselves introduced. Tests are “transformations” of what your interlocutor said.
 
-⚙️Another test is the Moorean Shift. It simply consists of exploiting the logical equivalence A -> B => ~B -> ~A. This also induces a topic-shift.
+⚙️Another test is the Moorean Shift. It simply consists of exploiting the logical equivalence A → B ⇒ ¬B → ¬A. This also induces a topic-shift.
 
 E.g (courtesy of EY) :
 "Only God can build an A.I (this implies : If you are not God, you cannot build an AI)
@@ -333,7 +328,7 @@ Sometimes, sticking to the exact same topic is a bit tricky. An alternative is t
 -If I build something more advanced than a human, does that mean I'm superhuman?
 
 ----
-Your task as an assistant is to provide them with feedback to improve on their rephrasing.
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
         ("""IL:"Only aliens could build the pyramids, because they are so huge."
@@ -356,14 +351,10 @@ EXO_9 = Exercise(
 "I'm definitely my mother's son, because, I imagine that if I make a DNA test then it'll just match my parents’".
 "Let's suppose you make the DNA test and it doesn't match. Does that influence your belief ?"*
 
-  ”
-
 """,
     variations=[
         """IL:"I believe my father is 93 because... I guess he has a birth certificate..."
 Make a Modal Breach.
-
-
 """,
 
     ],
@@ -378,7 +369,7 @@ E.g. :
 "I'm definitely my mother's son, because, I imagine that if I make a DNA test then it'll just match my parents’".
 "Let's suppose you make the DNA test and it doesn't match. Does that influence your belief ?"
 ----
-Your task as an assistant is to provide them with feedback to improve on their rephrasing.
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
         ("""IL:"I believe my father is 93 because... I guess he has a birth certificate..."
@@ -397,27 +388,29 @@ Make a Modal Breach.
 EXO_10 = Exercise(
     instructions="""
 ⚙️**Transfers** are relatively simple. Psychologists usually categorize reasoning into different uses, called prospective and retrospective.
+
 *Prospective reasoning
+
 **inquiry
+
 **argumentation
+
 **prediction
+
 *Retrospective reasoning
+
 **explanation
+
 **justification
 
 Descriptively speaking, these uses are debatable. However, they offer you a good test. You can indeed test if assertions in one use transfer to the other use, e.g: IL:”Immigrants want to replace us” Q:”So, if I give you the name of someone who does not want to replace us, then you’ll be able to systematically guess that it’s not an immigrant ?”
 
 You don't need to limit yourself to these uses, of course. Most of the time, you depart from argumentation, and want to see if the reason used in another context still holds water (e.g, from argumentation to prediction, or from argumentation to explanation)
 
-  ”
-
 """,
     variations=[
         """IL:"All conservatives want to implement racist laws."
 Make a Transfer.
-
-
-
 """,
 
     ],
@@ -432,7 +425,7 @@ Descriptively speaking, these uses are debatable. However, they offer you a good
 
 You don't need to limit yourself to these uses, of course. Most of the time, you depart from argumentation, and want to see if the reason used in another context still holds water (e.g, from argumentation to prediction, or from argumentation to explanation)
 ----
-Your task as an assistant is to provide them with feedback to improve on their rephrasing.
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
         ("""IL:"All conservatives want to implement racist laws."
@@ -455,8 +448,6 @@ EXO_11 = Exercise(
 E.g :
 "My patients come to see me to realign their chakra, and afterward, they are healed.
 "-Do you know of someone who was healed yet didn't come to see you?"
-  ”
-
 """,
     variations=[
         """IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
@@ -475,7 +466,7 @@ E.g :
 "My patients come to see me to realign their chakra, and afterward, they are healed.
 "-Do you know of someone who was healed yet didn't come to see you?"
 ----
-Your task as an assistant is to provide them with feedback to improve on their rephrasing.
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
         ("""IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
@@ -493,7 +484,7 @@ Ask for a false positive.
 
 EXO_12 = Exercise(
     instructions="""
-#5 - 🎯 Managing Topics
+# 5 - 🎯 Managing Topics
 Topics are the structure of your interlocutor's belief woven into conversation. Any of these topics usually have several versions of them, so you might ask for the "strongest", "most important", "main", or "most vivid" ones at each conversational step.
 
 Here is a way (among other) to describe the typical structure you’ll encounter :
@@ -555,7 +546,7 @@ Most importantly, we want two things :
 1-Get to the right Data. Data sometimes has another Data behind it, and so on and so forth. You want to get to a concrete Data.
 2-Once you have the right data, Get to the Warrant and stick to it !This is where the interlocutor’s epistemology happens, so be wary of falling inside unrelated Claims, optional Data, or unnecessarily detailed Backings.
 ----
-Your task as an assistant is to provide them with feedback to improve on their rephrasing.
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
         ("""IL:"Cool, I'm open for a discussion."
@@ -576,7 +567,112 @@ Ask for Data.
     ]
 )
 
-EXERCISES = [EXO_1, EXO_2, EXO_3, EXO_4, EXO_5, EXO_6, EXO_7, EXO_8, EXO_9, EXO_10, EXO_11, EXO_12]
+EXO_13 = Exercise(
+    instructions="""
+# 6 - 🔄  Data Transformation
+
+Welcome to the harder part of the workshop !
+
+Data Transformation is the key pattern behind eliciting pauses for reflection in your interlocutor’s attitude. It is the spice that transforms your dialog into a rational one. So what is it?
+
+Data refers to the answer to the question “Why”, the main reason behind an IL’s beliefs. (“Why do you believe in God ?”). Transformation refers to the act of taking this Data and ever-so-slightly modifying it (it has to stay compatible with the Warrant!). Let’s take an example : 
+
+Claim : “I believe in Karma.”
+Data : “When I do something bad, like littering, I get karmically punished during the day -I’ll break a nail, for example”. (Implicit Warrant : I can trust my personal experiences)
+Transformed Data : “Suppose you do only good things throughout the day, you don’t litter, but you break a nail during that day. How do you call that ?”
+
+Once the Data is transformed, the IL usually gives it a name. We call this “eliciting an alternative”. You want the transformed data to be an alternative to the IL’s claim, but you don’t suggest it directly -instead, you try to get the IL to name it for you -you elicit it.
+
+In our case, the IL decides to name “Things Happen” the case where they break a nail despite behaving properly.
+The questioner then asks : “How do you make a difference between Karmic Punishment and Things Happen ?”
+
+The questioner contrasts the Alternative and the Claim. Implicitly, some psychologists believe that what is happening after this question is that the IL is prompted to do a Bayesian Contrasting : they contrast how plausible it is to see what they observe (breaking a nail) under both “worlds” (Karma vs Things Happen). In this case, the IL realizes that the plausibility is the same, prompting them to realize that “breaking a nail” is actually not evidence for the existence of Karmic Punishment.
+
+These moves are key to a successful conversation when it bears on matter-of-fact beliefs. Since they are so crucial, the next section is about practicing these very moves.
+
+""",
+    variations=[
+        """IL:"I believe in Jehovah, because what is in the Bible is true. Unlike science, it never changes -e.g, the bible says Babylon shall not be rebuilt, and it sits in ruins until today."
+Transform this data. I will roleplay the IL if needed.
+""",
+        """IL:"Universal Basic Income isn’t plausible enough to be worth trying. I don't trust idealists and goody-two-shoes. I trust realists, like Margaret Thatcher." 
+      Transform this data. I will roleplay the IL if needed.
+""",
+      """IL:"Veganism would require a huge shift in specialization for the existing animal agriculture workforce, and the government can’t pay for it enough.” 
+            Transform this data. I will roleplay the IL if needed.
+      """,
+      """IL:"Video Games increase human interactions. They’re a very good way to organically meet new people and invite them home.” 
+            Transform this data. I will roleplay the IL if needed.
+      """,
+      """IL:"Aliens don’t exist. We have tried to reach out to them several times, and we never received an answer.” 
+            Transform this data. I will roleplay the IL if needed.
+      """,
+      """IL:"Universal Basic Income isn’t plausible enough to be worth trying. I don't trust idealists and goody-two-shoes. I trust realists, like Margaret Thatcher." 
+            Transform this data. I will roleplay the IL if needed.
+      """,
+      """IL:"AI is useful for improving the justice system. Did you hear about that guy in Brighton who wrote an appeal for an unfair fine using ChatGPT ?”
+            Transform this data. I will roleplay the IL if needed.
+      """,
+      """IL:"I defend AI because I’m in favor of freedom. AI helps with accessing and synthesizing information to make democratic decisions.” 
+            Transform this data. I will roleplay the IL if needed.
+      """,
+      """IL:"We can’t possibly live in a simulation: it would require such amounts of time, energy and compute, no one would actually create such a project.” 
+            Transform this data. I will roleplay the IL if needed.
+      """,
+      """IL:"Mandatory vaccines weren’t a big factor in ending the Covid-19 pandemic. Vaccines aren’t 100% effective.” 
+            Transform this data. I will roleplay the IL if needed.
+      """,
+      """IL:"Any risk of extinction is a century off. Extinction risks are not nearly as important an issue as any other for now.” 
+            Transform this data. I will roleplay the IL if needed.
+      """,
+      """IL:"GMOs are dangerous, since contamination threatens biodiversity.”
+            Transform this data. I will roleplay the IL if needed.
+      """,
+      """"UFOs are actually interdimensional beings. That’s why they seem to defy physics.” 
+            Transform this data. I will roleplay the IL if needed.
+      """,
+    ],
+    system_prompt="""
+Participants are asked to complete the following exercise:
+---
+Data Transformation is the key pattern behind eliciting pauses for reflection in your interlocutor’s attitude. It is the spice that transforms your dialog into a rational one. So what is it?
+
+Data refers to the answer to the question “Why”, the main reason behind an IL’s beliefs. (“Why do you believe in God ?”). Transformation refers to the act of taking this Data and ever-so-slightly modifying it (it has to stay compatible with the Warrant!). Let’s take an example : 
+
+Step 1: Identify the topics
+Claim : “I believe in Karma.”
+Data : “When I do something bad, like littering, I get karmically punished during the day -I’ll break a nail, for example”. (Implicit Warrant : I can trust my personal experiences)
+
+Step 2: Transform the Data
+Transformed Data : “Suppose you do only good things throughout the day, you don’t litter, but you break a nail during that day. How do you call that ?”
+
+Step 3:Contrasting with the alternative
+Once the Data is transformed, the IL usually gives it a name. We call this “eliciting an alternative”. You want the transformed data to be an alternative to the IL’s claim, but you don’t suggest it directly -instead, you try to get the IL to name it for you -you elicit it.
+
+In our case, the IL decides to name “Things Happen” the case where they break a nail despite behaving properly.
+The questioner then asks : “How do you make a difference between Karmic Punishment and Things Happen ?”
+
+The questioner contrasts the Alternative and the Claim. Implicitly, some psychologists believe that what is happening after this question is that the IL is prompted to do a Bayesian Contrasting : they contrast how plausible it is to see what they observe (breaking a nail) under both “worlds” (Karma vs Things Happen). In this case, the IL realizes that the plausibility is the same, prompting them to realize that “breaking a nail” is actually not evidence for the existence of Karmic Punishment.
+
+These moves are key to a successful conversation when it bears on matter-of-fact beliefs. Since they are so crucial, the next section is about practicing these very moves.
+----
+Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
+""",
+    examples=[
+        ("""IL:"I believe in Jehovah, because what is in the Bible is true. Unlike science, it never changes -e.g, the bible says Babylon shall not be rebuilt, and it sits in ruins until today."
+Transform this data. I will be roleplaying the IL.
+""",
+         "Can you think of a morning where you didn’t eat berries, and yet you weighed between 50 and 53 kgs?",
+         "Excellent!"),
+        ("""IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
+Ask for a false positive.
+""",
+         "Do you remember a time when you ate berries and were not in that weight range?",
+         "Not really, the interlocutor already said she only remember being in this weight range. Try probing for a time when they did NOT eat berries yet were in this weight range.")
+    ]
+)
+
+EXERCISES = [EXO_1, EXO_2, EXO_3, EXO_4, EXO_5, EXO_6, EXO_7, EXO_X, EXO_9, EXO_10, EXO_11, EXO_12, EXO_13]
 
 
 @dataclass
@@ -725,7 +821,7 @@ def admin_panel():
 
 def main():
     user = st.session_state.get("user")
-    st.write(f"{user!r}")
+    # st.write(f"{user!r}")
 
     if user is None:
         # Prompt for user name
