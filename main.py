@@ -5,6 +5,7 @@ from datetime import datetime
 import json
 from pathlib import Path
 from time import sleep, time
+import traceback
 import uuid
 import streamlit as st
 import openai
@@ -731,7 +732,13 @@ def db() -> dict[str, list[list[Question]]]:
     file = max(BACKUP_DIR.iterdir(), key=lambda f: int(f.stem), default=None)
     if file:
         print(f"Loading backup from {file}")
-        return db_from_json(json.loads(file.read_text()))
+        try:
+            return db_from_json(json.loads(file.read_text()))
+        except Exception as e:
+            print("🔥🔥🔥🔥🔥🔥🔥🔥🔥")
+            print(e)
+            traceback.print_exc()
+            return {}
     return {}
 
 def db_as_json() -> dict[str, list[list[dict]]]:
