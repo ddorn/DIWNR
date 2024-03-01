@@ -727,6 +727,11 @@ class Question:
 
 @st.cache_resource
 def db() -> dict[str, list[list[Question]]]:
+    # Find latest backup
+    file = max(BACKUP_DIR.iterdir(), key=lambda f: int(f.stem), default=None)
+    if file:
+        st.write(f"Loading backup from {file}")
+        return db_from_json(json.loads(file.read_text()))
     return {}
 
 def db_as_json() -> dict[str, list[list[dict]]]:
@@ -782,7 +787,7 @@ def get_openai_feedback(original: str, submission: str, exo: Exercise, model: st
             st.write(e)
             st.exception(e)
         return ""
-        
+
 
     return response.choices[0].message.content
 
