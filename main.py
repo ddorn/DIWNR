@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from time import sleep, time
 import uuid
+from numpy import sort
 import streamlit as st
 import openai
 from openai.types.chat import ChatCompletionMessageParam
@@ -14,9 +15,9 @@ from openai.types.chat import ChatCompletionMessageParam
 #MODEL="gpt-4-0125-preview"
 MODEL = "gpt-3.5-turbo-0125"
 MODELS = [
-    None,
-    "gpt-3.5-turbo-0125",
     "gpt-4-0125-preview",
+    "gpt-3.5-turbo-0125",
+    None,
 ]
 TEACHER_NAME = "Camille"
 
@@ -720,6 +721,17 @@ class Question:
             for msg in self.messages
         )
 
+    @property
+    def last_message_time(self):
+        if self.messages:
+            return self.messages[-1].timestamp
+        return -1
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        data["messages"] = [Message(**msg) for msg in data["messages"]]
+        return cls(**data)
+
 
 @st.cache_resource
 def db() -> dict[str, list[list[Question]]]:
@@ -737,7 +749,7 @@ def db_as_json() -> dict[str, list[list[dict]]]:
 def db_from_json(data: dict[str, list[list[dict]]]):
     return {
         k: [
-            [Question(**q) for q in qs]
+            [Question.from_dict(q) for q in qs]
             for qs in v
         ]
         for k, v in data.items()
@@ -824,9 +836,28 @@ def admin_panel():
     for q in need_response:
         exo = EXERCISES[q.exo]
         variation = exo.variations[q.variation]
-        st.markdown(f"""
-        ## **{q.user}** on "{variation}"
-""")
+        st.markdown(f"## **{q.user}** on {variation}")
+        with st.expander("Context"):
+            st.write("Exercise:")
+            st.write(exo.instructions)
+            st.divider()
+
+            # Collect last 5 questions
+            qs = sorted([
+                q_ for exo in db()[q.user]
+                for q_ in exo
+                if q_.messages and q_ is not q
+            ], key=lambda q: q.last_message_time, reverse=True)[:5]
+
+            if qs:
+                st.write("Previous chats:")
+                for q_ in qs:
+                    st.write(q_.variation)
+                    st.write(q_.fmt_messages(TEACHER_NAME))
+            else:
+                st.write("No previous chats")
+
+
         st.write(q.fmt_messages(TEACHER_NAME))
 
         if q.never_got_feedback and model:
@@ -846,13 +877,13 @@ def admin_panel():
             q.messages.append(Message(TEACHER_NAME, new_msg))
             st.rerun()
 
-    # Backup the database every new message
-    (BACKUP_DIR / f"{int(time())}.json").write_text(json.dumps(db_as_json(), indent=2))
 
     # Check for new questions every second
     old_db = deepcopy(db())
     while True:
         if old_db != db():
+            # Backup the database every new message
+            (BACKUP_DIR / f"{int(time())}.json").write_text(json.dumps(db_as_json(), indent=2))
             st.rerun()
         sleep(1)
 
