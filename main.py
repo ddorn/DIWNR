@@ -496,21 +496,18 @@ Topics are the structure of your interlocutor's belief woven into conversation. 
 
 Here is a way (among other) to describe the typical structure you’ll encounter :
 (image)
-C refers to the Claim : “I believe in God”. This is when you usually try to clear up definitions.
 
-D is the Data : “I had a spiritual experience, once”. You often need to ask for an example at this point.
-
-W is the Warrant, the link that justified inferring the Claim from the Data :
+- C refers to the Claim : “I believe in God”. This is when you usually try to clear up definitions.
+- D is the Data : “I had a spiritual experience, once”. You often need to ask for an example at this point.
+- W is the Warrant, the link that justified inferring the Claim from the Data :
 E.g. : “Spiritual experiences reveal deeper truth than science or logic”.
-
-R is the Rebuttal : “Unless if the spiritual experience was induced by a drug or something but I don’t think it was the case”.
-
-B is the Backing
+- R is the Rebuttal : “Unless if the spiritual experience was induced by a drug or something but I don’t think it was the case”.
+- B is the Backing
 Backing can exist for both Data (“I was 13. I was praying with my aunt in a church…”) and the Warrant (“I actually read a book titled “The book of the Shaman…”)
 
 Most importantly, we want two things :
-1-Get to the right Data. Data sometimes has another Data behind it, and so on and so forth. You want to get to a concrete Data.
-2-Once you have the right data, *Get to the Warrant and stick to it !* This is where the interlocutor’s epistemology happens, so be wary of falling inside unrelated Claims, optional Data, or unnecessarily detailed Backings.
+1. Get to the right Data. Data sometimes has another Data behind it, and so on and so forth. You want to get to a concrete Data.
+2. Once you have the right data, Get to the Warrant and stick to it !This is where the interlocutor’s epistemology happens, so be wary of falling inside unrelated Claims, optional Data, or unnecessarily detailed Backings.
 """,
     variations=[
         """IL:"Cool, I'm open for a discussion."
@@ -537,21 +534,18 @@ Topics are the structure of your interlocutor's belief woven into conversation. 
 
 Here is a way (among other) to describe the typical structure you’ll encounter :
 (image)
-C refers to the Claim : “I believe in God”. This is when you usually try to clear up definitions.
 
-D is the Data : “I had a spiritual experience, once”. You often need to ask for an example at this point.
-
-W is the Warrant, the link that justified inferring the Claim from the Data :
+- C refers to the Claim : “I believe in God”. This is when you usually try to clear up definitions.
+- D is the Data : “I had a spiritual experience, once”. You often need to ask for an example at this point.
+- W is the Warrant, the link that justified inferring the Claim from the Data :
 E.g. : “Spiritual experiences reveal deeper truth than science or logic”.
-
-R is the Rebuttal : “Unless if the spiritual experience was induced by a drug or something but I don’t think it was the case”.
-
-B is the Backing
+- R is the Rebuttal : “Unless if the spiritual experience was induced by a drug or something but I don’t think it was the case”.
+- B is the Backing
 Backing can exist for both Data (“I was 13. I was praying with my aunt in a church…”) and the Warrant (“I actually read a book titled “The book of the Shaman…”)
 
 Most importantly, we want two things :
-1-Get to the right Data. Data sometimes has another Data behind it, and so on and so forth. You want to get to a concrete Data.
-2-Once you have the right data, Get to the Warrant and stick to it !This is where the interlocutor’s epistemology happens, so be wary of falling inside unrelated Claims, optional Data, or unnecessarily detailed Backings.
+1. Get to the right Data. Data sometimes has another Data behind it, and so on and so forth. You want to get to a concrete Data.
+2. Once you have the right data, Get to the Warrant and stick to it !This is where the interlocutor’s epistemology happens, so be wary of falling inside unrelated Claims, optional Data, or unnecessarily detailed Backings.
 ----
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
