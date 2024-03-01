@@ -730,7 +730,7 @@ def db() -> dict[str, list[list[Question]]]:
     # Find latest backup
     file = max(BACKUP_DIR.iterdir(), key=lambda f: int(f.stem), default=None)
     if file:
-        st.write(f"Loading backup from {file}")
+        print(f"Loading backup from {file}")
         return db_from_json(json.loads(file.read_text()))
     return {}
 
