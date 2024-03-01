@@ -6,7 +6,6 @@ import json
 from pathlib import Path
 from time import sleep, time
 import uuid
-from numpy import sort
 import streamlit as st
 import openai
 from openai.types.chat import ChatCompletionMessageParam
@@ -62,7 +61,7 @@ Participants are asked to complete the following exercise:
 You’re invited to always put yourself in the shoes of the Questioner. You’ll need to give an answer to something the interlocutor (IL) has said
 
 Rapport is fundamental for having those discussions -it influences trust, the interpretation of what you're saying, and the ability to coherentize one's belief system.
-⚙️ A good way to improve rapport is simply rephrasing what your interlocutor has just said. Make sure to include the emotions they mention, and to ask whether you got it right. (e.g “don’t hesitate to tell me if I’m wrong). Try to stick to what they said, do not presume too much.
+⚙️ A good way to improve rapport is simply rephrasing what your interlocutor has just said. Make sure to include the emotions they mention, and to ask whether you got it right. (e.g “don’t hesitate to tell me if I’m wrong"). Try to stick to what they said, do not presume too much.
 This allows to make sure that you've understood them. It also forces you to pay more attention to what they're saying. Finally, it also avoids to incorrectly "ground": to signal that your interlocutor can proceed to the next point, despite the fact that you didn't understand.
 ----
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
@@ -99,7 +98,7 @@ This allows to break the erroneous outgroup depiction one person might have. If 
         Offer terminal affiliation.""",
         """ IL:"Climate Change is fake, it's a lie that's been put out there by the global elite".
         Offer terminal affiliation.""",
-        """ IL: I can't stand this whole lab meat research. My health is more important than their profit!
+        """ IL: "I can't stand this whole lab meat research. My health is more important than their profit!"
         Offer terminal affiliation."""
     ],
     system_prompt="""
@@ -491,11 +490,10 @@ Ask for a false positive.
 
 EXO_12 = Exercise(
     instructions="""
-# 5 - 🎯 Managing Topics
+# 4 - 🎯 Managing Topics
 Topics are the structure of your interlocutor's belief woven into conversation. Any of these topics usually have several versions of them, so you might ask for the "strongest", "most important", "main", or "most vivid" ones at each conversational step.
 
 Here is a way (among other) to describe the typical structure you’ll encounter :
-(image)
 
 - C refers to the Claim : “I believe in God”. This is when you usually try to clear up definitions.
 - D is the Data : “I had a spiritual experience, once”. You often need to ask for an example at this point.
@@ -570,7 +568,7 @@ Ask for Data.
 
 EXO_13 = Exercise(
     instructions="""
-# 6 - 🔄  Data Transformation
+# 5 - 🔄  Data Transformation
 
 Welcome to the harder part of the workshop !
 
