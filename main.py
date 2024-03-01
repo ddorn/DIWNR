@@ -768,14 +768,21 @@ def get_openai_feedback(original: str, submission: str, exo: Exercise, model: st
         examples.append({"role": "user", "content": fmt(orig, sub)})
         examples.append({"role": "assistant", "content": feedback})
 
-    response = openai.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": exo.system_prompt},
-            *examples,
-            {"role": "user", "content": fmt(original, submission)},
-        ],
-    )
+    try:
+        response = openai.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": exo.system_prompt},
+                *examples,
+                {"role": "user", "content": fmt(original, submission)},
+            ],
+        )
+    except Exception as e:
+        with st.expander("Silenced error"):
+            st.write(e)
+            st.exception(e)
+        return ""
+        
 
     return response.choices[0].message.content
 
