@@ -1,5 +1,6 @@
 from copy import deepcopy
 from dataclasses import field, dataclass
+import dataclasses
 from datetime import datetime
 import json
 from pathlib import Path
@@ -400,20 +401,13 @@ Make a Modal Breach.
 EXO_10 = Exercise(
     instructions="""
 ⚙️**Transfers** are relatively simple. Psychologists usually categorize reasoning into different uses, called prospective and retrospective.
-
-*Prospective reasoning
-
-**inquiry
-
-**argumentation
-
-**prediction
-
-*Retrospective reasoning
-
-**explanation
-
-**justification
+-  Prospective reasoning
+    -  inquiry
+    -  argumentation
+    -  prediction
+-  Retrospective reasoning
+    -  explanation
+    -  justification
 
 Descriptively speaking, these uses are debatable. However, they offer you a good test. You can indeed test if assertions in one use transfer to the other use, e.g: IL:”Immigrants want to replace us” Q:”So, if I give you the name of someone who does not want to replace us, then you’ll be able to systematically guess that it’s not an immigrant ?”
 
@@ -697,8 +691,8 @@ class Message:
 @dataclass
 class Question:
     user: str
-    original: str
-    exo: Exercise
+    exo: int
+    variation: int
     messages: list[Message] = field(default_factory=list)
     uid: str = field(default_factory=lambda: str(uuid.uuid4()))
 
@@ -726,16 +720,29 @@ class Question:
             for msg in self.messages
         )
 
-    # Don't show the exercise in __repr__
-    def __repr__(self):
-        return f"Question(user={self.user}, original={self.original}, messages={self.messages})"
-
-    __str__ = __repr__
-
 
 @st.cache_resource
 def db() -> dict[str, list[list[Question]]]:
     return {}
+
+def db_as_json() -> dict[str, list[list[dict]]]:
+    return {
+        k: [
+            [dataclasses.asdict(q) for q in qs]
+            for qs in v
+        ]
+        for k, v in db().items()
+    }
+
+def db_from_json(data: dict[str, list[list[dict]]]):
+    return {
+        k: [
+            [Question(**q) for q in qs]
+            for qs in v
+        ]
+        for k, v in data.items()
+    }
+
 
 
 def wait_feedback(question: Question):
@@ -777,30 +784,36 @@ def admin_panel():
         backups = sorted(BACKUP_DIR.iterdir(), reverse=True)
         if backups:
             labeled_backups = {
-                file: datetime.fromtimestamp(int(file.stem)).strftime("%H:%M %Y-%m-%d")
+                file: datetime.fromtimestamp(int(file.stem)).strftime("%Y-%m-%d %H:%M:%S")
                 for file in backups
             }
-            file = st.select_slider("Database to load", list(labeled_backups.values()))
+            label = st.selectbox("Database to load", list(labeled_backups.values()))
+            file = next(file for file, date in labeled_backups.items() if date == label)
 
-            st.button(f"⚠ Load backup from {file}", on_click=lambda: db().clear() or db().update(json.loads(file.read_text())))
+            if st.button(f"⚠ Load backup from {label}"):
+                db().clear()
+                db().update(db_from_json(json.loads(file.read_text())))
         else:
             st.write("No backups yet")
         st.write(db())
 
     with st.expander("Preview exercises"):
+        show_openai_prompts = st.checkbox("Show OpenAI prompts")
         for exo in EXERCISES:
             st.write(exo.instructions)
             for i, v in enumerate(exo.variations):
-                st.markdown(f"## {i+1}. {v}")
+                st.markdown(f"### Variation {i+1}\n{v}")
                 st.text_input("Answer", disabled=True, key=v)
 
-                st.write("System prompt")
-                st.code(exo.system_prompt)
-                for orig, sub, feedback in exo.examples:
-                    st.write("Example")
-                    st.code(f"Original: {orig}\nRephrase: {sub}")
-                    st.write("Feedback")
-                    st.code(feedback)
+                if show_openai_prompts:
+                    st.write("System prompt")
+                    st.code(exo.system_prompt)
+                    for orig, sub, feedback in exo.examples:
+                        st.write("Example")
+                        st.code(f"Original: {orig}\nRephrase: {sub}")
+                        st.write("Feedback")
+                        st.code(feedback)
+            st.divider()
 
 
     st.write("# Feedback panel")
@@ -809,13 +822,15 @@ def admin_panel():
     need_response.sort(key=lambda q: q.needs_response_since)
 
     for q in need_response:
+        exo = EXERCISES[q.exo]
+        variation = exo.variations[q.variation]
         st.markdown(f"""
-        ## **{q.user}** on "{q.original}"
+        ## **{q.user}** on "{variation}"
 """)
         st.write(q.fmt_messages(TEACHER_NAME))
 
         if q.never_got_feedback and model:
-            default = get_openai_feedback(q.original, q.messages[0].content, q.exo, model)
+            default = get_openai_feedback(variation, q.messages[0].content, EXERCISES[q.exo], model)
         elif q.never_got_feedback:
             default = ""
         else:
@@ -831,10 +846,8 @@ def admin_panel():
             q.messages.append(Message(TEACHER_NAME, new_msg))
             st.rerun()
 
-    # Backup the database every 3 minutes
-    last_backup = max(BACKUP_DIR.iterdir(), default=None)
-    if last_backup is None or time() - last_backup.stat().st_mtime > BACKUP_FREQUENCY:
-        (BACKUP_DIR / f"{int(time())}.json").write_text(json.dumps(db()))
+    # Backup the database every new message
+    (BACKUP_DIR / f"{int(time())}.json").write_text(json.dumps(db_as_json(), indent=2))
 
     # Check for new questions every second
     old_db = deepcopy(db())
@@ -862,15 +875,16 @@ def main():
 
     # Create a new user if it doesn't exist
     db().setdefault(user, [
-        [Question(user, q, exo) for q in exo.variations]
-        for exo in EXERCISES
+        [Question(user, e, i) for i in range(len(exo.variations))]
+        for e, exo in enumerate(EXERCISES)
     ])
 
-    for exo, qs in zip(EXERCISES, db()[user]):
-        st.write(exo.instructions)
+    for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user])):
+        anchor = f"<a name='exo-{i+1}'></a>"
+        st.write(anchor + exo.instructions, unsafe_allow_html=True)
 
-        for i, q in enumerate(qs):
-            st.markdown(f"## {i+1}. {q.original}")
+        for i, (q, variation) in enumerate(zip(qs, exo.variations)):
+            st.markdown(f"### Variation {i+1}\n{variation}")
 
             with st.container():
                 st.write(q.fmt_messages(user))
@@ -879,19 +893,34 @@ def main():
                     st.rerun()
 
             # If there was never any feedback, don't show the following questions
+            if user == "D":
+                continue
             if q.never_got_feedback:
                 break
         else:
+            st.divider()
             continue
         break
 
     with st.sidebar:
-        for exo, qs in zip(EXERCISES, db()[user]):
+        st.write("*Table of contents*")
+        toc = ""
+        for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user])):
             # First line with a # is the title
-            header = next((line for line in exo.instructions.splitlines() if line.startswith("#")), "no header")
-            st.write(header)
-            if any(q.never_got_feedback for q in qs):
-                break
+            header = next((line for line in exo.instructions.splitlines() if line.strip().startswith("#")), "no header")
+            title = header.lstrip("# ")
+            depth = header[:-len(title)].count("#")
+            # if title != "no header":
+            if depth == 1:
+                toc += f"\n[{title}](#exo-{i+1})  "
+            elif depth == 2:
+                toc += f"- [{title}](#exo-{i+1})  "
+            toc += "\n"
+                # st.write(f"[{title}](#exo-{i+1})")
+            # if any(q.never_got_feedback for q in qs):
+                # break
+
+        st.markdown(toc)
 
     # Check for new messages every second
     past_msgs = deepcopy(db()[user])
