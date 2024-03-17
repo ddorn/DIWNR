@@ -9,6 +9,7 @@ python = ">=3.10.0"
 streamlit = "^1.31.0"
 openai = "^1.11.1"
 pre-commit = "^3.6.2"
+pyyaml = "^6.0.1"
 
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
