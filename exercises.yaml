@@ -226,6 +226,7 @@ examples:
 
 ---
 name: 6 - Optimizing Narrative Transportation
+disable_timer: true
 instructions: |
   Congrats! You finished section 1.
   # 2 - 📖 Optimizing Narrative Transportation

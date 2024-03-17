@@ -350,50 +350,61 @@ def admin_panel():
     for q in db().questions_needing_feedback():
         exo = EXERCISES[q.exo]
         variation = exo.variations[q.variation]
-        st.markdown(f"## **{q.user}** on {exo.name}  \n{variation}")
 
-        with st.expander("Context"):
-            st.write(exo.instructions)
-            st.divider()
+        # This container helps clearing the screen faster.
+        # We cont.empty() when we're done with the feedback
+        # Which avoid having streamlit remove the elements one by one
+        # and gains ~1.5s per question
+        cont = st.container()
+        with cont:
+            st.markdown(f"## **{q.user}** on {exo.name}  \n{variation}")
 
-            # Collect last 5 questions with discussions
-            qs = sorted(
-                [q_ for exo in db()[q.user] for q_ in exo if q_.messages and q_ is not q],
-                key=lambda q: q.last_message_time,
-                reverse=True,
-            )[:5]
+            with st.expander("Context"):
+                st.write(exo.instructions)
+                st.divider()
 
-            if qs:
-                st.write("#### Previous chats")
-                for q_ in qs:
-                    st.write(f"On **{q_.full_exo.name}** — {q_.variation_text}")
-                    st.write(q_.fmt_messages(TEACHER_NAME))
+                # Collect last 5 questions with discussions
+                qs = sorted(
+                    [q_ for exo in db()[q.user] for q_ in exo if q_.messages and q_ is not q],
+                    key=lambda q: q.last_message_time,
+                    reverse=True,
+                )[:5]
+
+                if qs:
+                    st.write("#### Previous chats")
+                    for q_ in qs:
+                        st.write(f"On **{q_.full_exo.name}** — {q_.variation_text}")
+                        st.write(q_.fmt_messages(TEACHER_NAME))
+                else:
+                    st.write("No previous chats")
+
+            st.write(q.fmt_messages(TEACHER_NAME))
+
+            if q.never_got_feedback and model:
+                default = get_openai_feedback(
+                    variation, q.messages[0].content, EXERCISES[q.exo], model
+                )
+            elif q.never_got_feedback:
+                default = ""
             else:
-                st.write("No previous chats")
+                default = ""
 
-        st.write(q.fmt_messages(TEACHER_NAME))
-
-        if q.never_got_feedback and model:
-            default = get_openai_feedback(variation, q.messages[0].content, EXERCISES[q.exo], model)
-        elif q.never_got_feedback:
-            default = ""
-        else:
-            default = ""
-
-        with st.form(key=f"form-{q.uid}"):
-            new_msg = st.text_area("Feedback", value=default, height=250, key=q.uid)
-            submit = st.form_submit_button("Send")
-        if new_msg and submit:
-            q.messages.append(Message(TEACHER_NAME, new_msg))
-            st.rerun()
-
-        # Allow to skip a message if any feedback has been sent.
-        # The condition is important to avoid softlocks. The participants can't continue if the teacher doesn't send feedback.
-        if not q.never_got_feedback:
-            skip = st.button("Skip", key="skip" + q.uid)
-            if skip:
-                q.messages[-1].skipped_by_teacher = True
+            with st.form(key=f"form-{q.uid}"):
+                new_msg = st.text_area("Feedback", value=default, height=250, key=q.uid)
+                submit = st.form_submit_button("Send")
+            if new_msg and submit:
+                q.messages.append(Message(TEACHER_NAME, new_msg))
+                cont.empty()
                 st.rerun()
+
+            # Allow to skip a message if any feedback has been sent.
+            # The condition is important to avoid softlocks. The participants can't continue if the teacher doesn't send feedback.
+            if not q.never_got_feedback:
+                skip = st.button("Skip", key="skip" + q.uid)
+                if skip:
+                    q.messages[-1].skipped_by_teacher = True
+                    cont.empty()
+                    st.rerun()
 
     # Check for new questions every second
     old_db = deepcopy(db())
@@ -483,25 +494,25 @@ def main():
             st.rerun()
         sleep(0.5)
 
-        # Show the timer
-        try:
-            last_msg = max(q.last_message_time for exo in db()[user] for q in exo if q.messages)
-        except ValueError:  # No messages
-            pass
-        else:
-            time_since_last_msg = time() - last_msg
-            time_left_for_question = TIME_PER_QUESTION - time_since_last_msg
-            if time_left_for_question > 0:
-                minutes, seconds = divmod(time_left_for_question, 60)
-                timer.metric("Time left for the question", f"{minutes:02.0f}:{seconds:02.0f}")
-            else:
-                minutes, seconds = divmod(-time_left_for_question, 60)
-                timer.metric("Time left for the question", f"-{minutes:02.0f}:{seconds:02.0f}")
+        # Show the timer for the current question
+        done = [q for exo in db()[user] for q in exo if q.messages]
+        to_do = [q for exo in db()[user] for q in exo if not q.messages]
 
-                if time() - last_snow > 40:
-                    last_snow = time()
-                    st.snow()
-                    st.toast("Time's up, try to submit :)")
+        if not done or not to_do or to_do[0].full_exo.disable_timer:
+            continue
+
+        time_since_last_msg = time() - done[-1].last_message_time
+        time_left_for_question = TIME_PER_QUESTION - time_since_last_msg
+        minutes, seconds = divmod(abs(time_left_for_question), 60)
+        if time_left_for_question >= 0:
+            timer.metric("Time left for the question", f"{minutes:02.0f}:{seconds:02.0f}")
+        else:
+            timer.metric("Time over since", f"{minutes:02.0f}:{seconds:02.0f}")
+
+            if time() - last_snow > 40:
+                last_snow = time()
+                st.snow()
+                st.toast("Time's up, try to submit :)")
 
 
 if __name__ == "__main__":
