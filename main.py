@@ -22,6 +22,7 @@ TEACHER_NAME = "Camille"
 BACKUP_DIR = Path("backups")
 BACKUP_DIR.mkdir(exist_ok=True)
 BACKUP_FREQUENCY = 5 * 60  # seconds
+TIME_PER_QUESTION = 3 * 60
 
 
 @dataclass
@@ -1010,12 +1011,40 @@ def main():
 
         st.markdown(toc)
 
+        number_of_questions = sum(len(exo.variations) for exo in EXERCISES)
+        questions_done = len([q for exo in db()[user] for q in exo if q.messages])
+        st.metric("Progress", f"{questions_done}/{number_of_questions}")
+
+    with st.sidebar:
+        timer = st.empty()
+    last_snow = 0
+
     # Check for new messages every second
     past_msgs = deepcopy(db()[user])
     while True:
         if past_msgs != db()[user]:
             st.rerun()
-        sleep(1)
+        sleep(0.5)
+
+        # Show the timer
+        try:
+            last_msg = max(q.last_message_time for exo in db()[user] for q in exo if q.messages)
+        except ValueError:  # No messages
+            pass
+        else:
+            time_since_last_msg = time() - last_msg
+            time_left_for_question = TIME_PER_QUESTION - time_since_last_msg
+            if time_left_for_question > 0:
+                minutes, seconds = divmod(time_left_for_question, 60)
+                timer.metric("Time left for the question", f"{minutes:02.0f}:{seconds:02.0f}")
+            else:
+                minutes, seconds = divmod(-time_left_for_question, 60)
+                timer.metric("Time left for the question", f"-{minutes:02.0f}:{seconds:02.0f}")
+
+                if time() - last_snow > 40:
+                    last_snow = time()
+                    st.snow()
+                    st.toast("Time's up, try to submit :)")
 
 
 if __name__ == "__main__":
