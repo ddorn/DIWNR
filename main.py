@@ -11,7 +11,8 @@ import streamlit as st
 import openai
 from openai.types.chat import ChatCompletionMessageParam
 import yaml
-
+import altair as alt
+import pandas as pd
 
 MODELS = [
     None,
@@ -55,6 +56,8 @@ class Exercise:
 EXERCISES = [Exercise.from_yaml(d) for d in yaml.safe_load_all(Path("exercises.yaml").read_text())]
 # Filter for HIDDEN exercises
 EXERCISES = [exo for exo in EXERCISES if not "HIDDEN" in exo.name]
+
+NUM_QUESTIONS = sum(len(exo.variations) for exo in EXERCISES)
 
 
 @dataclass
@@ -103,37 +106,115 @@ class Question:
         data["messages"] = [Message(**msg) for msg in data["messages"]]
         return cls(**data)
 
+    @property
+    def variation_text(self) -> str:
+        return EXERCISES[self.exo].variations[self.variation]
+
+    @property
+    def full_exo(self) -> Exercise:
+        return EXERCISES[self.exo]
+
+
+class DataBase(dict[str, list[list[Question]]]):
+    """
+    The database is a dictionary of users, each user has a list of exercises, each exercise has a list of questions.
+    """
+
+    def as_json(self) -> dict[str, list[list[dict]]]:
+        return {k: [[dataclasses.asdict(q) for q in qs] for qs in v] for k, v in self.items()}
+
+    @classmethod
+    def from_json(cls, data: dict[str, list[list[dict]]]) -> "DataBase":
+        return cls({k: [[Question.from_dict(q) for q in qs] for qs in v] for k, v in data.items()})
+
+    def reload(self, path: Path) -> None:
+        other = DataBase.from_json(json.loads(path.read_text()))
+        self.clear()
+        self.update(other)
+        return self
+
+    def save(self, path: Path) -> None:
+        path.write_text(json.dumps(self.as_json(), indent=2))
+
+    def login(self, user: str) -> None:
+        """Create a new user if it doesn't exist"""
+        self.setdefault(
+            user,
+            [
+                [Question(user, e, v) for v in range(len(exo.variations))]
+                for e, exo in enumerate(EXERCISES)
+            ],
+        )
+
+    def questions_needing_feedback(self) -> list[Question]:
+        need_response = [q for q in self.all_questions() if q.needs_response_since is not None]
+        need_response.sort(key=lambda q: q.needs_response_since)
+        return need_response
+
+    def questions_done(self, user: str) -> int:
+        return len([q for exo in self[user] for q in exo if q.messages])
+
+    def all_questions(self) -> list[Question]:
+        return [q for user in self.values() for qs in user for q in qs]
+
+    def answer_times(self, last_n: int | None = None) -> list[float]:
+        """Return the mean time it takes for the teacher to answer a question."""
+
+        answered = [
+            q
+            for q in self.all_questions()
+            if any(message.user == TEACHER_NAME for message in q.messages)
+        ]
+
+        # We collect all pairs (user message -> teacher message)
+        # With the maximum number of user messages in between
+        times = []
+        for q in answered:
+            sent_at = 0
+            for message in q.messages:
+                if message.user == TEACHER_NAME:
+                    if sent_at != 0:
+                        times.append((sent_at, message.timestamp))
+                    else:
+                        # Two teacher messages in a row
+                        pass
+                    sent_at = 0
+                elif sent_at == 0:
+                    sent_at = message.timestamp
+                else:
+                    # Two user messages in a row
+                    pass
+
+        if last_n is not None:
+            times.sort()
+            times = times[-last_n:]
+
+        return [end - start for start, end in times]
+
+    def mean_answer_time(self, last_n: int | None = None) -> float:
+        times = self.answer_times(last_n)
+        if times:
+            return sum(times) / len(times)
+        return float("nan")
+
 
 @st.cache_resource
-def db() -> dict[str, list[list[Question]]]:
+def db() -> DataBase:
+
     # Find latest backup
-    file = max(BACKUP_DIR.iterdir(), key=lambda f: int(f.stem), default=None)
-    if file:
-        print(f"Loading backup from {file}")
-        try:
-            return db_from_json(json.loads(file.read_text()))
-        except Exception as e:
-            print("🔥🔥🔥🔥🔥🔥🔥🔥🔥")
-            print(e)
-            traceback.print_exc()
-            return {}
-    return {}
+    try:
+        file = max(BACKUP_DIR.iterdir(), key=lambda f: int(f.stem))
+    except ValueError:
+        return DataBase()
 
-
-def db_as_json() -> dict[str, list[list[dict]]]:
-    return {k: [[dataclasses.asdict(q) for q in qs] for qs in v] for k, v in db().items()}
-
-
-def db_from_json(data: dict[str, list[list[dict]]]):
-    return {k: [[Question.from_dict(q) for q in qs] for qs in v] for k, v in data.items()}
-
-
-def wait_feedback(question: Question):
-    assert question.messages
-
-    with st.spinner("Getting feedback..."):
-        while question.messages[-1].user is not TEACHER_NAME:
-            sleep(1)
+    print(f"Loading backup from {file}")
+    try:
+        return DataBase().reload(file)
+    except Exception as e:
+        print("🔥🔥🔥🔥🔥🔥🔥🔥🔥")
+        print(e)
+        traceback.print_exc()
+        return DataBase()
 
 
 @st.cache_data()
@@ -166,27 +247,87 @@ def get_openai_feedback(original: str, submission: str, exo: Exercise, model: st
 
 
 def admin_panel():
-    model = st.selectbox("OpenAI model", MODELS)
 
-    with st.expander("Database"):
-        st.button("Wipe database", on_click=lambda: db().clear())
-        backups = sorted(BACKUP_DIR.iterdir(), reverse=True)
-        if backups:
-            labeled_backups = {
-                file: datetime.fromtimestamp(int(file.stem)).strftime("%Y-%m-%d %H:%M:%S")
-                for file in backups
-            }
-            label = st.selectbox("Database to load", list(labeled_backups.values()))
-            file = next(file for file, date in labeled_backups.items() if date == label)
+    db().__class__ = DataBase  # Hack to have the new methods available during development
 
-            if st.button(f"⚠ Load backup from {label}"):
-                db().clear()
-                db().update(db_from_json(json.loads(file.read_text())))
+    with st.sidebar:
+        answer_time = db().mean_answer_time()
+        st.metric("Mean answer time", f"{answer_time:.0f} seconds")
+
+        model = st.selectbox("OpenAI model", MODELS)
+
+        txt = "## Participants\n"
+        if db():
+            for u in db():
+                txt += f"- **{u}** ({db().questions_done(u)}/{NUM_QUESTIONS})\n"
         else:
-            st.write("No backups yet")
-        st.write(db())
+            txt += "No participants yet"
+        st.markdown(txt)
 
-    with st.expander("Preview exercises"):
+        # Histogram of answer times
+
+        times = db().answer_times()
+        if times:
+            df = pd.DataFrame({"time": times})
+            hist = (
+                alt.Chart(df)
+                .mark_bar()
+                .encode(
+                    x=alt.X("time", bin=alt.Bin(maxbins=20), title="Time to answer (s)"),
+                    y="count()",
+                )
+            )
+            st.altair_chart(hist, use_container_width=True)
+
+        with st.expander("⚙ Database"):
+            st.button("Wipe database", on_click=lambda: db().clear())
+            st.download_button(
+                "Download current database",
+                json.dumps(db().as_json(), indent=2),
+                "database.json",
+                "Download the database as a JSON file",
+            )
+            backups = sorted(BACKUP_DIR.iterdir(), reverse=True)
+            if backups:
+                labeled_backups = {
+                    # file: datetime.fromtimestamp(int(file.stem)).strftime("%Y-%m-%d %H:%M:%S")
+                    # Tue 1st Jan 2030 00:00:00
+                    file: datetime.fromtimestamp(int(file.stem)).strftime("%a %d %b %Y %H:%M:%S")
+                    for file in backups
+                }
+                label = st.selectbox("Backup to load", list(labeled_backups.values()))
+                file = next(file for file, date in labeled_backups.items() if date == label)
+
+            else:
+                label = None
+                st.write("No backups yet")
+
+            new = st.file_uploader("Upload database", type="json")
+            if new:
+                label = "uploaded file"
+
+            if label is not None:
+                # Load a copy of the database
+                if label == "uploaded file":
+                    new_db = DataBase.from_json(json.loads(new.read().decode()))
+                else:
+                    new_db = DataBase().reload(file)
+
+                # Show info about the backup
+                st.write(
+                    f"""
+                ### Backup info
+                {', '.join(f'**{u}** ({new_db.questions_done(u)}/{NUM_QUESTIONS})' for u in new_db) or 'empty'}
+                         """
+                )
+
+                if st.button(f"⚠ Load backup from {label}"):
+                    db().clear()
+                    db().update(new_db)
+
+        preview_exos = st.toggle("Preview exercises")
+
+    if preview_exos:
         show_openai_prompts = st.checkbox("Show OpenAI prompts")
         for exo in EXERCISES:
             st.write(exo.instructions)
@@ -206,21 +347,16 @@ def admin_panel():
 
     st.write("# Feedback panel")
 
-    need_response = [
-        q for user in db().values() for qs in user for q in qs if q.needs_response_since
-    ]
-    need_response.sort(key=lambda q: q.needs_response_since)
-
-    for q in need_response:
+    for q in db().questions_needing_feedback():
         exo = EXERCISES[q.exo]
         variation = exo.variations[q.variation]
-        st.markdown(f"## **{q.user}** on {variation}")
+        st.markdown(f"## **{q.user}** on {exo.name}  \n{variation}")
+
         with st.expander("Context"):
-            st.write("Exercise:")
             st.write(exo.instructions)
             st.divider()
 
-            # Collect last 5 questions
+            # Collect last 5 questions with discussions
             qs = sorted(
                 [q_ for exo in db()[q.user] for q_ in exo if q_.messages and q_ is not q],
                 key=lambda q: q.last_message_time,
@@ -228,9 +364,9 @@ def admin_panel():
             )[:5]
 
             if qs:
-                st.write("Previous chats:")
+                st.write("#### Previous chats")
                 for q_ in qs:
-                    st.write(q_.variation)
+                    st.write(f"On **{q_.full_exo.name}** — {q_.variation_text}")
                     st.write(q_.fmt_messages(TEACHER_NAME))
             else:
                 st.write("No previous chats")
@@ -264,9 +400,9 @@ def admin_panel():
     while True:
         if old_db != db():
             # Backup the database every new message
-            (BACKUP_DIR / f"{int(time())}.json").write_text(json.dumps(db_as_json(), indent=2))
+            db().save(BACKUP_DIR / f"{int(time())}.json")
             st.rerun()
-        sleep(1)
+        sleep(0.5)
 
 
 def main():
@@ -283,16 +419,10 @@ def main():
         admin_panel()
         return
     else:
-        st.write(f"Welcome {user}")
+        st.write(f"Welcome {user}!")
 
     # Create a new user if it doesn't exist
-    db().setdefault(
-        user,
-        [
-            [Question(user, e, i) for i in range(len(exo.variations))]
-            for e, exo in enumerate(EXERCISES)
-        ],
-    )
+    db().login(user)
 
     for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user])):
         anchor = f"<a name='exo-{i+1}'></a>\n"
@@ -340,9 +470,7 @@ def main():
 
         st.markdown(toc)
 
-        number_of_questions = sum(len(exo.variations) for exo in EXERCISES)
-        questions_done = len([q for exo in db()[user] for q in exo if q.messages])
-        st.metric("Progress", f"{questions_done}/{number_of_questions}")
+        st.metric("Progress", f"{db().questions_done(user)}/{NUM_QUESTIONS}")
 
     with st.sidebar:
         timer = st.empty()

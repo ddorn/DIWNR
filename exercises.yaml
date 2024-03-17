@@ -39,10 +39,10 @@ examples:  # Few-shot examples fed to GPT to improve the feedback
 ---
 name: 1 - Rephrasing
 instructions: |
-  **For all the following exercices, you’re invited to always put yourself in the shoes of the Questioner. You’ll need to give an answer to something the interlocutor (IL) has said, while applying the tip (⚙️) you're given. Pretend to be in a *live conversation*. You can also combine the tips as you learn them along the way.**
+  **For all the following exercices, you’re invited to always put yourself in the shoes of the Questioner. You’ll need to give an answer to something the interlocutor (IL) has said, while applying the tip (⚙️) you're given. Pretend to be in a *live conversation*. You can also combine the tips as you learn them along the way. Expect about 40 seconds of delay before I answer your submission.****
 
   # 1 - 🎯 Optimizing Rapport Management
-  Rapport is fundamental for having those discussions -it influences trust, the interpretation of what you're saying, and the ability to coherentize one's belief system. More importantly, if you're facing someone who is angry, spending time on the following techniques will allow you to calm the discussion down.
+  Rapport is fundamental for having those discussions -it influences trust, the interpretation of what you're saying, and the ability to coherentize one's belief system. More importantly, if you're facing someone who is angry, spending time on the following techniques will allow you to calm the discussion down. Remember, for the following exercices, our goals is to first calm our interlocutor down. We'll only be able to discuss productively later on.
 
   ⚙️ A good way to improve rapport is simply **rephrasing what your interlocutor has just said**. Make sure to include the **emotions** they mention, and to ask  **whether you got it right**. (e.g “don’t hesitate to tell me if I’m wrong). Try to stick to what they said, do not presume too much.
 
@@ -294,9 +294,9 @@ instructions: |
 
   E.g (courtesy of EY) :
 
-  *"Only God can build an A.I (this implies : If you are not God, you cannot build an AI)
-
-  -If I build an AI, does that mean I'm God ?"*
+  > *"Only God can build an A.I (this implies : If you are not God, you cannot build an AI)*
+  >
+  > *— If I build an AI, does that mean I'm God ?"*
 
   Notice the conversations switches from being about AI onto being about God, so make sure the result does orient you towards the topic you aim for.
   Sometimes, sticking to the exact same topic is a bit tricky. An alternative is to select a broader category:
