@@ -21,7 +21,7 @@ TEACHER_NAME = "Camille"
 
 BACKUP_DIR = Path("backups")
 BACKUP_DIR.mkdir(exist_ok=True)
-BACKUP_FREQUENCY = 5 * 60 # seconds
+BACKUP_FREQUENCY = 5 * 60  # seconds
 
 
 @dataclass
@@ -66,13 +66,17 @@ This allows to make sure that you've understood them. It also forces you to pay 
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
-        ("I don't see why AI would be dangerous, it's not that powerful.",
-         "AI can’t do enough to really cause us any problems we can’t solve.",
-         "Good, make sure to check whether you’ve understood your interlocutor (e.g;, “did I understand you well ?”)"),
-        ("I don't see why AI would be dangerous, it's not that powerful.",
-         "I see. I presume by “powerful”, you mean that it can’t actually affect things in the world, and since being dangerous means creating dangerous situations, AI can’t do this since it’s essentially a fancy computer program. Is that a fair restatement of your views?",
-         "Very Good! Try to be more concise.")
-    ]
+        (
+            "I don't see why AI would be dangerous, it's not that powerful.",
+            "AI can’t do enough to really cause us any problems we can’t solve.",
+            "Good, make sure to check whether you’ve understood your interlocutor (e.g;, “did I understand you well ?”)",
+        ),
+        (
+            "I don't see why AI would be dangerous, it's not that powerful.",
+            "I see. I presume by “powerful”, you mean that it can’t actually affect things in the world, and since being dangerous means creating dangerous situations, AI can’t do this since it’s essentially a fancy computer program. Is that a fair restatement of your views?",
+            "Very Good! Try to be more concise.",
+        ),
+    ],
 )
 
 
@@ -98,7 +102,7 @@ This allows to break the erroneous outgroup depiction one person might have. If 
         """ IL:"Climate Change is fake, it's a lie that's been put out there by the global elite".
         Offer terminal affiliation.""",
         """ IL: "I can't stand this whole lab meat research. My health is more important than their profit!"
-        Offer terminal affiliation."""
+        Offer terminal affiliation.""",
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
@@ -115,13 +119,17 @@ This allows to break the erroneous outgroup depiction one person might have. If 
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Please be concise.
 """,
     examples=[
-        ("I hate progressives because they are threatening the safety of our institutions.",
-         "I certainly want to maintain the safety of  our institutions, not tear them down!.",
-         "Great, note that it might sound slightly defensive. You could insist by saying I want to maintain the safety of our institutions too)."),
-        ("I hate progressives because they are threatening the safety of our institutions.",
-         "I sympathize! Societal institutions are definitely important for a well-functioning society, and I don’t like them being threatened, either.",
-         "Excellent!")
-    ]
+        (
+            "I hate progressives because they are threatening the safety of our institutions.",
+            "I certainly want to maintain the safety of  our institutions, not tear them down!.",
+            "Great, note that it might sound slightly defensive. You could insist by saying I want to maintain the safety of our institutions too).",
+        ),
+        (
+            "I hate progressives because they are threatening the safety of our institutions.",
+            "I sympathize! Societal institutions are definitely important for a well-functioning society, and I don’t like them being threatened, either.",
+            "Excellent!",
+        ),
+    ],
 )
 
 
@@ -152,13 +160,17 @@ Note however that encouragers are not affiliation markers, they don't necessaril
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
-        ("I hate conservatives because they're just racist.",
-         "Huh. I see, go on",
-         "Good, be sure to also rephrase what they're saying in the process."),
-        ("I hate conservatives because they're just racist.",
-         "Mmm, understood. Their views feel unfair to you",
-         "Excellent!")
-    ]
+        (
+            "I hate conservatives because they're just racist.",
+            "Huh. I see, go on",
+            "Good, be sure to also rephrase what they're saying in the process.",
+        ),
+        (
+            "I hate conservatives because they're just racist.",
+            "Mmm, understood. Their views feel unfair to you",
+            "Excellent!",
+        ),
+    ],
 )
 
 EXO_4 = Exercise(
@@ -184,13 +196,17 @@ Participants are asked to complete the following exercise:
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
-        ("I can't stand those so-called effective charities, they don't care about economic development, they don't care about the local culture of the population they intervene on, and, like, where's my responsibility in giving them money?",
-         "So you feel the experts are not taking businesses into consideration, they are just trying to keep development from happening",
-         "Not really. In general, it’s a bit like “doing a bullet point list” of what you’re interlocutor has just said, instead of summarizing it.)."),
-        ("I can't stand those so-called effective charities, they don't care about economic development, they don't care about the local culture of the population they intervene on, and, like, where's my responsibility in giving them money?",
-         "I see, not only do you think these charities fail at adressing a bigger problem, they also neglect human factors, and moreover you feel they demand a responsibility that you don't think you have.",
-         "Excellent!")
-    ]
+        (
+            "I can't stand those so-called effective charities, they don't care about economic development, they don't care about the local culture of the population they intervene on, and, like, where's my responsibility in giving them money?",
+            "So you feel the experts are not taking businesses into consideration, they are just trying to keep development from happening",
+            "Not really. In general, it’s a bit like “doing a bullet point list” of what you’re interlocutor has just said, instead of summarizing it.).",
+        ),
+        (
+            "I can't stand those so-called effective charities, they don't care about economic development, they don't care about the local culture of the population they intervene on, and, like, where's my responsibility in giving them money?",
+            "I see, not only do you think these charities fail at adressing a bigger problem, they also neglect human factors, and moreover you feel they demand a responsibility that you don't think you have.",
+            "Excellent!",
+        ),
+    ],
 )
 
 EXO_5 = Exercise(
@@ -217,15 +233,19 @@ Participants are asked to complete the following exercise:
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
-        ("""IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens."
+        (
+            """IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens."
         Rephrase while mentionning and possibly contrasting the nuances.""",
-         "So like, you think a certain amount of restriction makes sense, but not prohibit it entirely?",
-         "Good!"),
-        ("""IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens."
+            "So like, you think a certain amount of restriction makes sense, but not prohibit it entirely?",
+            "Good!",
+        ),
+        (
+            """IL:"I'm not saying we should make abortion illegal, but abortion supporters are pushing it too far. We should raise responsible citizens."
         Rephrase while mentionning and possibly contrasting the nuances.""",
-         "Right, so on the one hand,  you think more regulations are needed, but on the other, you  don't think we should prohibit it entirely.",
-         "Excellent!")
-    ]
+            "Right, so on the one hand,  you think more regulations are needed, but on the other, you  don't think we should prohibit it entirely.",
+            "Excellent!",
+        ),
+    ],
 )
 
 EXO_6 = Exercise(
@@ -250,13 +270,9 @@ send "Done" in the field text below.
 Your task as an assistant is to answer with "Good".
 """,
     examples=[
-        ("""send "Done" in the field text below.""",
-         "Done",
-         "Good!"),
-        ("""send "Done" in the field text below.""",
-         "Done",
-         "Excellent!")
-    ]
+        ("""send "Done" in the field text below.""", "Done", "Good!"),
+        ("""send "Done" in the field text below.""", "Done", "Excellent!"),
+    ],
 )
 
 EXO_7 = Exercise(
@@ -276,7 +292,6 @@ Since tests can come off as a little upfront, you might want to add question ver
         """IL:"I believe in the christian God because my parents are christian."
 Apply the Outsider Test.
 """,
-
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
@@ -293,16 +308,20 @@ This is not something questioners usually improvise on the fly. Most of the time
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
-        ("""IL:"I believe in the christian God because my parents are christian."
+        (
+            """IL:"I believe in the christian God because my parents are christian."
 Apply the Outsider Test.
 """,
-         "Huh, I wonder if someone with Hindu parents would say the same thing, though?",
-         "Excellent!"),
-        ("""IL:"I believe in the christian God because my parents are christian."
+            "Huh, I wonder if someone with Hindu parents would say the same thing, though?",
+            "Excellent!",
+        ),
+        (
+            """IL:"I believe in the christian God because my parents are christian."
 Apply the Outsider Test.""",
-         "If that's true then you should believe in Vishnu",
-         "Not really. Make sure to go step-by-step, e.g. asking what it would have been like if they were born in a Hindu family. Also, you can use a question verb (e.g. I wonder if, if that's true) to make it sound nicer.")
-    ]
+            "If that's true then you should believe in Vishnu",
+            "Not really. Make sure to go step-by-step, e.g. asking what it would have been like if they were born in a Hindu family. Also, you can use a question verb (e.g. I wonder if, if that's true) to make it sound nicer.",
+        ),
+    ],
 )
 
 EXO_X = Exercise(
@@ -323,7 +342,6 @@ Sometimes, sticking to the exact same topic is a bit tricky. An alternative is t
         """IL:"Only aliens could build the pyramids, because they are so huge."
 Question your interlocutor with a Moorean Shift.
 """,
-
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
@@ -343,16 +361,20 @@ Sometimes, sticking to the exact same topic is a bit tricky. An alternative is t
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
-        ("""IL:"Only aliens could build the pyramids, because they are so huge."
+        (
+            """IL:"Only aliens could build the pyramids, because they are so huge."
 Question your interlocutor with a Moorean Shift.
 """,
-         "If something is over a certain size, does it mean it has been built by aliens?",
-         "Excellent!"),
-        ("""IL:"Only aliens could build the pyramids, because they are so huge."
+            "If something is over a certain size, does it mean it has been built by aliens?",
+            "Excellent!",
+        ),
+        (
+            """IL:"Only aliens could build the pyramids, because they are so huge."
 Question your interlocutor with a Moorean Shift.""",
-         "If I build a pyramid, does that mean I'm an alien?",
-         "Nearly there!  The idea of you building a pyramid is a bit far-fetched, but you got the idea. You can rephrase it by using a broader category, e.g. If someone builds something very large,  does it mean they're alien?")
-    ]
+            "If I build a pyramid, does that mean I'm an alien?",
+            "Nearly there!  The idea of you building a pyramid is a bit far-fetched, but you got the idea. You can rephrase it by using a broader category, e.g. If someone builds something very large,  does it mean they're alien?",
+        ),
+    ],
 )
 
 EXO_9 = Exercise(
@@ -368,7 +390,6 @@ EXO_9 = Exercise(
         """IL:"I believe my father is 93 because... I guess he has a birth certificate..."
 Make a Modal Breach.
 """,
-
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
@@ -384,17 +405,21 @@ E.g. :
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
-        ("""IL:"I believe my father is 93 because... I guess he has a birth certificate..."
+        (
+            """IL:"I believe my father is 93 because... I guess he has a birth certificate..."
 Make a Modal Breach.
 """,
-         "What if his birth certificate says something different, or record keeping in his country’s inaccurate? Would you still think he’s 93?",
-         "Excellent!"),
-        ("""IL:"I believe my father is 93 because... I guess he has a birth certificate..."
+            "What if his birth certificate says something different, or record keeping in his country’s inaccurate? Would you still think he’s 93?",
+            "Excellent!",
+        ),
+        (
+            """IL:"I believe my father is 93 because... I guess he has a birth certificate..."
 Make a Modal Breach.
 """,
-         "But you can't be sure, right?",
-         "Not quite, the idea is to ask what would happen if the certificate e.g. isn't found or says something different.")
-    ]
+            "But you can't be sure, right?",
+            "Not quite, the idea is to ask what would happen if the certificate e.g. isn't found or says something different.",
+        ),
+    ],
 )
 
 EXO_10 = Exercise(
@@ -417,7 +442,6 @@ You don't need to limit yourself to these uses, of course. Most of the time, you
         """IL:"All conservatives want to implement racist laws."
 Make a Transfer.
 """,
-
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
@@ -433,17 +457,21 @@ You don't need to limit yourself to these uses, of course. Most of the time, you
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
-        ("""IL:"All conservatives want to implement racist laws."
+        (
+            """IL:"All conservatives want to implement racist laws."
 Make a Transfer.
 """,
-         "If I introduce you to someone who is against racist laws, you’d be able to infer they’re not conservative?",
-         "Excellent!"),
-        ("""IL:"All conservatives want to implement racist laws."
+            "If I introduce you to someone who is against racist laws, you’d be able to infer they’re not conservative?",
+            "Excellent!",
+        ),
+        (
+            """IL:"All conservatives want to implement racist laws."
 Make a Transfer.
 """,
-         "So does that mean the Soviets (who implemented racist laws) were conservative?",
-         "Not ideal. You're introducing a new element for your interlocutor, and they might disagree with it. It's better to probe for their own example instead.")
-    ]
+            "So does that mean the Soviets (who implemented racist laws) were conservative?",
+            "Not ideal. You're introducing a new element for your interlocutor, and they might disagree with it. It's better to probe for their own example instead.",
+        ),
+    ],
 )
 
 EXO_11 = Exercise(
@@ -458,7 +486,6 @@ E.g :
         """IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
 Ask for a false positive.
 """,
-
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
@@ -474,17 +501,21 @@ E.g :
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
-        ("""IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
+        (
+            """IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
 Ask for a false positive.
 """,
-         "Can you think of a morning where you didn’t eat berries, and yet you weighed between 50 and 53 kgs?",
-         "Excellent!"),
-        ("""IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
+            "Can you think of a morning where you didn’t eat berries, and yet you weighed between 50 and 53 kgs?",
+            "Excellent!",
+        ),
+        (
+            """IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
 Ask for a false positive.
 """,
-         "Do you remember a time when you ate berries and were not in that weight range?",
-         "Not really, the interlocutor already said she only remember being in this weight range. Try probing for a time when they did NOT eat berries yet were in this weight range.")
-    ]
+            "Do you remember a time when you ate berries and were not in that weight range?",
+            "Not really, the interlocutor already said she only remember being in this weight range. Try probing for a time when they did NOT eat berries yet were in this weight range.",
+        ),
+    ],
 )
 
 EXO_12 = Exercise(
@@ -510,19 +541,18 @@ Most importantly, we want two things :
         """IL:"Cool, I'm open for a discussion."
 Ask for a claim.
 """,
-      """IL:"I believe in Karma."
+        """IL:"I believe in Karma."
 Ask for Data.
       """,
-      """IL:"I believe in Karma because I just experience it everyday."
+        """IL:"I believe in Karma because I just experience it everyday."
 Ask for an example.
       """,
-      """IL:"Like, yesterday, I mentally insulted someone, and a few minutes later, my foot hit a table corner."
+        """IL:"Like, yesterday, I mentally insulted someone, and a few minutes later, my foot hit a table corner."
 Ask for a Warrant… in an appropriate way.
       """,
-      """IL:"I believe this incident was Karma."
+        """IL:"I believe this incident was Karma."
 Ask for a rebuttal.
       """,
-
     ],
     system_prompt="""
 Participants are asked to complete the following exercise:
@@ -547,22 +577,28 @@ Most importantly, we want two things :
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
-        ("""IL:"Cool, I'm open for a discussion."
+        (
+            """IL:"Cool, I'm open for a discussion."
 Ask for a claim.
 """,
-         "Nice! Is there any belief that you hold that you'd want to talk about?",
-         "Excellent!"),
-        ("""IL:"I believe in Karma."
+            "Nice! Is there any belief that you hold that you'd want to talk about?",
+            "Excellent!",
+        ),
+        (
+            """IL:"I believe in Karma."
 Ask for Data.
 """,
-         "Why do you believe in Karma?",
-         "Good, but imprecise: try to ask for the main reason why they believe in Karma"),
-        ("""IL:"I believe in Karma."
+            "Why do you believe in Karma?",
+            "Good, but imprecise: try to ask for the main reason why they believe in Karma",
+        ),
+        (
+            """IL:"I believe in Karma."
 Ask for Data.
 """,
-          "What do you mean by Karma?",
-          "Clarifying definitions is an important step, but this isn't Data. Ask what is the main reason why they believe in Karma.")
-    ]
+            "What do you mean by Karma?",
+            "Clarifying definitions is an important step, but this isn't Data. Ask what is the main reason why they believe in Karma.",
+        ),
+    ],
 )
 
 EXO_13 = Exercise(
@@ -596,37 +632,37 @@ Transform this data. I will roleplay the IL if needed.
         """IL:"Universal Basic Income isn’t plausible enough to be worth trying. I don't trust idealists and goody-two-shoes. I trust realists, like Margaret Thatcher."
       Transform this data. I will roleplay the IL if needed.
 """,
-      """IL:"Veganism would require a huge shift in specialization for the existing animal agriculture workforce, and the government can’t pay for it enough.”
+        """IL:"Veganism would require a huge shift in specialization for the existing animal agriculture workforce, and the government can’t pay for it enough.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"Video Games increase human interactions. They’re a very good way to organically meet new people and invite them home.”
+        """IL:"Video Games increase human interactions. They’re a very good way to organically meet new people and invite them home.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"Aliens don’t exist. We have tried to reach out to them several times, and we never received an answer.”
+        """IL:"Aliens don’t exist. We have tried to reach out to them several times, and we never received an answer.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"Universal Basic Income isn’t plausible enough to be worth trying. I don't trust idealists and goody-two-shoes. I trust realists, like Margaret Thatcher."
+        """IL:"Universal Basic Income isn’t plausible enough to be worth trying. I don't trust idealists and goody-two-shoes. I trust realists, like Margaret Thatcher."
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"AI is useful for improving the justice system. Did you hear about that guy in Brighton who wrote an appeal for an unfair fine using ChatGPT ?”
+        """IL:"AI is useful for improving the justice system. Did you hear about that guy in Brighton who wrote an appeal for an unfair fine using ChatGPT ?”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"I defend AI because I’m in favor of freedom. AI helps with accessing and synthesizing information to make democratic decisions.”
+        """IL:"I defend AI because I’m in favor of freedom. AI helps with accessing and synthesizing information to make democratic decisions.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"We can’t possibly live in a simulation: it would require such amounts of time, energy and compute, no one would actually create such a project.”
+        """IL:"We can’t possibly live in a simulation: it would require such amounts of time, energy and compute, no one would actually create such a project.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"Mandatory vaccines weren’t a big factor in ending the Covid-19 pandemic. Vaccines aren’t 100% effective.”
+        """IL:"Mandatory vaccines weren’t a big factor in ending the Covid-19 pandemic. Vaccines aren’t 100% effective.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"Any risk of extinction is a century off. Extinction risks are not nearly as important an issue as any other for now.”
+        """IL:"Any risk of extinction is a century off. Extinction risks are not nearly as important an issue as any other for now.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """IL:"GMOs are dangerous, since contamination threatens biodiversity.”
+        """IL:"GMOs are dangerous, since contamination threatens biodiversity.”
             Transform this data. I will roleplay the IL if needed.
       """,
-      """"UFOs are actually interdimensional beings. That’s why they seem to defy physics.”
+        """"UFOs are actually interdimensional beings. That’s why they seem to defy physics.”
             Transform this data. I will roleplay the IL if needed.
       """,
     ],
@@ -657,20 +693,38 @@ These moves are key to a successful conversation when it bears on matter-of-fact
 Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 """,
     examples=[
-        ("""IL:"I believe in Jehovah, because what is in the Bible is true. Unlike science, it never changes -e.g, the bible says Babylon shall not be rebuilt, and it sits in ruins until today."
+        (
+            """IL:"I believe in Jehovah, because what is in the Bible is true. Unlike science, it never changes -e.g, the bible says Babylon shall not be rebuilt, and it sits in ruins until today."
 Transform this data. I will be roleplaying the IL.
 """,
-         "Can you think of a morning where you didn’t eat berries, and yet you weighed between 50 and 53 kgs?",
-         "Excellent!"),
-        ("""IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
+            "Can you think of a morning where you didn’t eat berries, and yet you weighed between 50 and 53 kgs?",
+            "Excellent!",
+        ),
+        (
+            """IL:"I believe eating berries in the morning makes you healthy because, when I do, I'm always between 50 and 53 kg."
 Ask for a false positive.
 """,
-         "Do you remember a time when you ate berries and were not in that weight range?",
-         "Not really, the interlocutor already said she only remember being in this weight range. Try probing for a time when they did NOT eat berries yet were in this weight range.")
-    ]
+            "Do you remember a time when you ate berries and were not in that weight range?",
+            "Not really, the interlocutor already said she only remember being in this weight range. Try probing for a time when they did NOT eat berries yet were in this weight range.",
+        ),
+    ],
 )
 
-EXERCISES = [EXO_1, EXO_2, EXO_3, EXO_4, EXO_5, EXO_6, EXO_7, EXO_X, EXO_9, EXO_10, EXO_11, EXO_12, EXO_13]
+EXERCISES = [
+    EXO_1,
+    EXO_2,
+    EXO_3,
+    EXO_4,
+    EXO_5,
+    EXO_6,
+    EXO_7,
+    EXO_X,
+    EXO_9,
+    EXO_10,
+    EXO_11,
+    EXO_12,
+    EXO_13,
+]
 
 
 @dataclass
@@ -705,8 +759,7 @@ class Question:
 
     def fmt_messages(self, user: str):
         return "  \n".join(
-            f"**{'Me' if msg.user == user else msg.user}**: {msg.content}"
-            for msg in self.messages
+            f"**{'Me' if msg.user == user else msg.user}**: {msg.content}" for msg in self.messages
         )
 
     @property
@@ -736,24 +789,13 @@ def db() -> dict[str, list[list[Question]]]:
             return {}
     return {}
 
+
 def db_as_json() -> dict[str, list[list[dict]]]:
-    return {
-        k: [
-            [dataclasses.asdict(q) for q in qs]
-            for qs in v
-        ]
-        for k, v in db().items()
-    }
+    return {k: [[dataclasses.asdict(q) for q in qs] for qs in v] for k, v in db().items()}
+
 
 def db_from_json(data: dict[str, list[list[dict]]]):
-    return {
-        k: [
-            [Question.from_dict(q) for q in qs]
-            for qs in v
-        ]
-        for k, v in data.items()
-    }
-
+    return {k: [[Question.from_dict(q) for q in qs] for qs in v] for k, v in data.items()}
 
 
 def wait_feedback(question: Question):
@@ -770,7 +812,7 @@ def get_openai_feedback(original: str, submission: str, exo: Exercise, model: st
     def fmt(orig: str, sub: str):
         return f"Original: {orig}\nRephrase: {sub}"
 
-    examples : list[ChatCompletionMessageParam]= []
+    examples: list[ChatCompletionMessageParam] = []
     for orig, sub, feedback in exo.examples:
         examples.append({"role": "user", "content": fmt(orig, sub)})
         examples.append({"role": "assistant", "content": feedback})
@@ -789,7 +831,6 @@ def get_openai_feedback(original: str, submission: str, exo: Exercise, model: st
             st.write(e)
             st.exception(e)
         return ""
-
 
     return response.choices[0].message.content
 
@@ -835,7 +876,9 @@ def admin_panel():
 
     st.write("# Feedback panel")
 
-    need_response = [q for user in db().values() for qs in user for q in qs if q.needs_response_since]
+    need_response = [
+        q for user in db().values() for qs in user for q in qs if q.needs_response_since
+    ]
     need_response.sort(key=lambda q: q.needs_response_since)
 
     for q in need_response:
@@ -848,11 +891,11 @@ def admin_panel():
             st.divider()
 
             # Collect last 5 questions
-            qs = sorted([
-                q_ for exo in db()[q.user]
-                for q_ in exo
-                if q_.messages and q_ is not q
-            ], key=lambda q: q.last_message_time, reverse=True)[:5]
+            qs = sorted(
+                [q_ for exo in db()[q.user] for q_ in exo if q_.messages and q_ is not q],
+                key=lambda q: q.last_message_time,
+                reverse=True,
+            )[:5]
 
             if qs:
                 st.write("Previous chats:")
@@ -872,10 +915,7 @@ def admin_panel():
             default = ""
 
         with st.form(key=f"form-{q.uid}"):
-            new_msg = st.text_area("Feedback",
-                                    value=default,
-                                    height=250,
-                                    key=q.uid)
+            new_msg = st.text_area("Feedback", value=default, height=250, key=q.uid)
             submit = st.form_submit_button("Send")
         if new_msg and submit:
             q.messages.append(Message(TEACHER_NAME, new_msg))
@@ -884,11 +924,10 @@ def admin_panel():
         # Allow to skip a message if any feedback has been sent.
         # The condition is important to avoid softlocks. The participants can't continue if the teacher doesn't send feedback.
         if not q.never_got_feedback:
-            skip = st.button("Skip", key="skip"+q.uid)
+            skip = st.button("Skip", key="skip" + q.uid)
             if skip:
                 q.messages[-1].skipped_by_teacher = True
                 st.rerun()
-
 
     # Check for new questions every second
     old_db = deepcopy(db())
@@ -917,10 +956,13 @@ def main():
         st.write(f"Welcome {user}")
 
     # Create a new user if it doesn't exist
-    db().setdefault(user, [
-        [Question(user, e, i) for i in range(len(exo.variations))]
-        for e, exo in enumerate(EXERCISES)
-    ])
+    db().setdefault(
+        user,
+        [
+            [Question(user, e, i) for i in range(len(exo.variations))]
+            for e, exo in enumerate(EXERCISES)
+        ],
+    )
 
     for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user])):
         anchor = f"<a name='exo-{i+1}'></a>"
@@ -950,18 +992,21 @@ def main():
         toc = ""
         for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user])):
             # First line with a # is the title
-            header = next((line for line in exo.instructions.splitlines() if line.strip().startswith("#")), "no header")
+            header = next(
+                (line for line in exo.instructions.splitlines() if line.strip().startswith("#")),
+                "no header",
+            )
             title = header.lstrip("# ")
-            depth = header[:-len(title)].count("#")
+            depth = header[: -len(title)].count("#")
             # if title != "no header":
             if depth == 1:
                 toc += f"\n[{title}](#exo-{i+1})  "
             elif depth == 2:
                 toc += f"- [{title}](#exo-{i+1})  "
             toc += "\n"
-                # st.write(f"[{title}](#exo-{i+1})")
+            # st.write(f"[{title}](#exo-{i+1})")
             # if any(q.never_got_feedback for q in qs):
-                # break
+            # break
 
         st.markdown(toc)
 
@@ -971,7 +1016,6 @@ def main():
         if past_msgs != db()[user]:
             st.rerun()
         sleep(1)
-
 
 
 if __name__ == "__main__":
