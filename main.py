@@ -12,12 +12,10 @@ import openai
 from openai.types.chat import ChatCompletionMessageParam
 
 
-#MODEL="gpt-4-0125-preview"
-MODEL = "gpt-3.5-turbo-0125"
 MODELS = [
+    None,
     "gpt-4-0125-preview",
     "gpt-3.5-turbo-0125",
-    None,
 ]
 TEACHER_NAME = "Camille"
 
@@ -680,6 +678,7 @@ class Message:
     user: str
     content: str
     timestamp: float = field(default_factory=lambda: time())
+    skipped_by_teacher: bool = False
 
 
 @dataclass
@@ -691,15 +690,11 @@ class Question:
     uid: str = field(default_factory=lambda: str(uuid.uuid4()))
 
     @property
-    def needs_response(self):
-        return self.messages and self.messages[-1].user is not TEACHER_NAME
-
-    @property
     def needs_response_since(self):
-        # Return the timestamp of the first non-teacher message that doesn't have a response
+        # Return the timestamp of the first non-teacher message that doesn't have a response and is not skipped
         t = None
         for msg in self.messages[::-1]:
-            if msg.user == TEACHER_NAME:
+            if msg.user == TEACHER_NAME or msg.skipped_by_teacher:
                 return t
             t = msg.timestamp
         return t
@@ -838,7 +833,6 @@ def admin_panel():
                         st.code(feedback)
             st.divider()
 
-
     st.write("# Feedback panel")
 
     need_response = [q for user in db().values() for qs in user for q in qs if q.needs_response_since]
@@ -868,7 +862,6 @@ def admin_panel():
             else:
                 st.write("No previous chats")
 
-
         st.write(q.fmt_messages(TEACHER_NAME))
 
         if q.never_got_feedback and model:
@@ -887,6 +880,14 @@ def admin_panel():
         if new_msg and submit:
             q.messages.append(Message(TEACHER_NAME, new_msg))
             st.rerun()
+
+        # Allow to skip a message if any feedback has been sent.
+        # The condition is important to avoid softlocks. The participants can't continue if the teacher doesn't send feedback.
+        if not q.never_got_feedback:
+            skip = st.button("Skip", key="skip"+q.uid)
+            if skip:
+                q.messages[-1].skipped_by_teacher = True
+                st.rerun()
 
 
     # Check for new questions every second
