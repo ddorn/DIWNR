@@ -295,7 +295,7 @@ def main():
     )
 
     for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user])):
-        anchor = f"<a name='exo-{i+1}'></a>"
+        anchor = f"<a name='exo-{i+1}'></a>\n"
         st.write(anchor + exo.instructions, unsafe_allow_html=True)
 
         for i, (q, variation) in enumerate(zip(qs, exo.variations)):
