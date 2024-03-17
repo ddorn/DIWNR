@@ -1,3 +1,42 @@
+# This file contains all the exercises and a template for new exercises.
+# If you want to hide an exercise, you can add HIDDEN to its name.
+# Yaml is a powerful language, and you can find a lot of documentation online.
+# The few important things to know are:
+# - Different documents (=exercises) are separated by ---
+# - Yaml is indentation-sensitive, so be careful with the spaces. Everything at the same level of indentation is considered to be part of the same object.
+# - The best way to write multiline strings is to use the | character, followed by a newline, and then the string, indented to match the | character.
+
+name: Template HIDDEN
+instructions: |
+  Initial instructions displayed at the start of the exercise
+  for the participants.
+
+variations:
+  - |
+    Variations using the same instructions
+    Each will have a textbox for the participants to answer.
+  - |
+    multiline
+    aligned with the pipe character
+
+system_prompt: |
+  Participants are asked to complete the following exercise:
+  ---
+  ...
+  ---
+  Your task as an assistant is to provide them with feedback to improve on their answer. Be concise.
+
+examples:  # Few-shot examples fed to GPT to improve the feedback
+  - original: "I don't see why AI would be dangerous, it's not that powerful."
+    student: "AI can’t do enough to really cause us any problems we can’t solve."
+    feedback: "Good, make sure to check whether you’ve understood your interlocutor (e.g;, “did I understand you well ?”)"
+  - original:
+    student:
+    feedback:
+
+
+
+---
 name: 1 - Rephrasing
 instructions: |
   **For all the following exercices, you’re invited to always put yourself in the shoes of the Questioner. You’ll need to give an answer to something the interlocutor (IL) has said, while applying the tip (⚙️) you're given. Pretend to be in a *live conversation*. You can also combine the tips as you learn them along the way.**
@@ -35,6 +74,7 @@ examples:
   - original: "I don't see why AI would be dangerous, it's not that powerful."
     student: "I see. I presume by “powerful”, you mean that it can’t actually affect things in the world, and since being dangerous means creating dangerous situations, AI can’t do this since it’s essentially a fancy computer program. Is that a fair restatement of your views?"
     feedback: "Very Good! Try to be more concise."
+
 
 
 ---
@@ -82,7 +122,7 @@ system_prompt: |
 
 examples:
   - original: "I hate progressives because they are threatening the safety of our institutions."
-    student: "I certainly want to maintain the safety of  our institutions, not tear them down!."
+    student: "I certainly want to maintain the safety of our institutions, not tear them down!."
     feedback: "Great, note that it might sound slightly defensive. You could insist by saying I want to maintain the safety of our institutions too)."
   - original: "I hate progressives because they are threatening the safety of our institutions."
     student: "I sympathize! Societal institutions are definitely important for a well-functioning society, and I don’t like them being threatened, either."

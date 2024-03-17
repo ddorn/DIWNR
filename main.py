@@ -53,6 +53,8 @@ class Exercise:
 
 
 EXERCISES = [Exercise.from_yaml(d) for d in yaml.safe_load_all(Path("exercises.yaml").read_text())]
+# Filter for HIDDEN exercises
+EXERCISES = [exo for exo in EXERCISES if not "HIDDEN" in exo.name]
 
 
 @dataclass
