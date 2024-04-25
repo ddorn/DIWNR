@@ -1,3 +1,4 @@
+import os
 from copy import deepcopy
 from dataclasses import field, dataclass
 import dataclasses
@@ -324,6 +325,22 @@ def admin_panel():
                 if st.button(f"⚠ Load backup from {label}"):
                     db().clear()
                     db().update(new_db)
+
+        # Update the source code code.
+        with st.expander("🛠 Source code"):
+            modif_timestamp = os.path.getmtime("main.py")
+            st.write(f"Last code change: {datetime.fromtimestamp(modif_timestamp):%c}")
+
+            last_commits = os.popen("git log --oneline -n 3").read().strip()
+            # Remove the hashes, add bullet points
+            last_commits = "\n- ".join(line.partition(" ")[2] for line in last_commits.splitlines())
+            st.write(f"Last 3 commits:\n- {last_commits}")
+
+            if st.button("Pull latest version"):
+                with st.spinner("running `git pull`..."):
+                    output = os.popen("git pull").read()
+                st.code(output)
+                st.write("Please refresh the page to see the changes, if any.")
 
         preview_exos = st.toggle("Preview exercises")
 
