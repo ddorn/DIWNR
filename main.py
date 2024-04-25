@@ -336,6 +336,9 @@ def admin_panel():
             last_commits = "\n- ".join(line.partition(" ")[2] for line in last_commits.splitlines())
             st.write(f"Last 3 commits:\n- {last_commits}")
 
+            st.warning(
+                "When pulling, if the code [in the github](https://github.com/ddorn/DIWNR) is broken, the app will be broken too until Diego's intervention on the server."
+            )
             if st.button("Pull latest version"):
                 with st.spinner("running `git pull`..."):
                     output = os.popen("git pull").read()
