@@ -1,12 +1,13 @@
 import os
 from copy import deepcopy
-from dataclasses import field, dataclass
+from dataclasses import asdict, field, dataclass, fields, is_dataclass
 import dataclasses
 from datetime import datetime
 import json
 from pathlib import Path
 from time import sleep, time
 import traceback
+from typing import Any, Self, Type
 import uuid
 import streamlit as st
 import openai
@@ -17,7 +18,7 @@ import pandas as pd
 
 MODELS = [
     None,
-    "gpt-4-0125-preview",
+    "gpt-4o",
     "gpt-3.5-turbo-0125",
 ]
 TEACHER_NAME = "Camille"
@@ -102,11 +103,6 @@ class Question:
             return self.messages[-1].timestamp
         return -1
 
-    @classmethod
-    def from_dict(cls, data: dict):
-        data["messages"] = [Message(**msg) for msg in data["messages"]]
-        return cls(**data)
-
     @property
     def variation_text(self) -> str:
         return EXERCISES[self.exo].variations[self.variation]
@@ -116,36 +112,47 @@ class Question:
         return EXERCISES[self.exo]
 
 
-class DataBase(dict[str, list[list[Question]]]):
+@dataclass
+class User:
+    name: str
+    password: str
+    exos: list[list[Question]]
+
+    def __init__(self, name: str, password: str, exos: list[list[Question]] | None = None):
+        self.name = name
+        self.password = password
+        if exos is None:
+            exos = [
+                [Question(name, e, v) for v in range(len(exo.variations))]
+                for e, exo in enumerate(EXERCISES)
+            ]
+        self.exos = exos
+
+    def all_questions(self) -> list[Question]:
+        return [q for exo in self.exos for q in exo]
+
+
+class DataBase(dict[str, User]):
     """
     The database is a dictionary of users, each user has a list of exercises, each exercise has a list of questions.
     """
 
-    def as_json(self) -> dict[str, list[list[dict]]]:
-        return {k: [[dataclasses.asdict(q) for q in qs] for qs in v] for k, v in self.items()}
-
-    @classmethod
-    def from_json(cls, data: dict[str, list[list[dict]]]) -> "DataBase":
-        return cls({k: [[Question.from_dict(q) for q in qs] for qs in v] for k, v in data.items()})
-
-    def reload(self, path: Path) -> None:
+    def reload(self, path: Path) -> Self:
         other = DataBase.from_json(json.loads(path.read_text()))
         self.clear()
         self.update(other)
         return self
 
     def save(self, path: Path) -> None:
-        path.write_text(json.dumps(self.as_json(), indent=2))
+        path.write_text(json.dumps(dataclass_to_dict(self), indent=2))
 
-    def login(self, user: str) -> None:
+    def login(self, user: str, password: str) -> bool:
         """Create a new user if it doesn't exist"""
-        self.setdefault(
-            user,
-            [
-                [Question(user, e, v) for v in range(len(exo.variations))]
-                for e, exo in enumerate(EXERCISES)
-            ],
-        )
+        if user not in self:
+            self[user] = User(user, password)
+        elif self[user].password != password:
+            return False
+        return True
 
     def questions_needing_feedback(self) -> list[Question]:
         need_response = [q for q in self.all_questions() if q.needs_response_since is not None]
@@ -153,10 +160,10 @@ class DataBase(dict[str, list[list[Question]]]):
         return need_response
 
     def questions_done(self, user: str) -> int:
-        return len([q for exo in self[user] for q in exo if q.messages])
+        return sum(1 for q in self[user].all_questions() if q.messages)
 
     def all_questions(self) -> list[Question]:
-        return [q for user in self.values() for qs in user for q in qs]
+        return [q for user in self.values() for q in user.all_questions()]
 
     def answer_times(self, last_n: int | None = None) -> list[float]:
         """Return the mean time it takes for the teacher to answer a question."""
@@ -197,6 +204,51 @@ class DataBase(dict[str, list[list[Question]]]):
         if times:
             return sum(times) / len(times)
         return float("nan")
+
+    @classmethod
+    def from_json(cls, data: dict) -> Self:
+        if isinstance(next(iter(data.values()), None), list):
+            # This was the first format, where the users were stored as just the list of their questions
+            data = {k: dict(name=k, password="", exos=v) for k, v in data.items()}
+            print("Converting old format to new format")
+        return cls({k: dict_to_dataclass(User, v) for k, v in data.items()})
+
+    def to_json(self) -> dict:
+        return dataclass_to_dict(self)
+
+
+def dataclass_to_dict(obj: Any) -> Any:
+    if is_dataclass(obj):
+        return {k: dataclass_to_dict(v) for k, v in asdict(obj).items()}
+    elif isinstance(obj, list):
+        return [dataclass_to_dict(i) for i in obj]
+    elif isinstance(obj, dict):
+        return {k: dataclass_to_dict(v) for k, v in obj.items()}
+    else:
+        return obj
+
+
+def dict_to_dataclass[T](cls: Type[T], data: Any) -> T:
+    try:
+        if isinstance(data, dict):
+            fieldtypes = {f.name: f.type for f in fields(cls)}
+            return cls(**{f: dict_to_dataclass(fieldtypes[f], data[f]) for f in data})
+        elif isinstance(data, list):
+            elem_type = cls.__args__[0]
+            return [dict_to_dataclass(elem_type, i) for i in data]
+        else:
+            return data
+    except Exception as e:
+        print(f"Error when converting {data} to {cls}")
+        raise e
+
+
+if __name__ == "__main__":
+    d = DataBase()
+    d.login("Diego", "123")
+    j = dataclass_to_dict(d)
+    d2 = DataBase.from_json(j)
+    assert d == d2
 
 
 @st.cache_resource
@@ -284,7 +336,7 @@ def admin_panel():
             st.button("Wipe database", on_click=lambda: db().clear())
             st.download_button(
                 "Download current database",
-                json.dumps(db().as_json(), indent=2),
+                json.dumps(db().to_json(), indent=2),
                 "database.json",
                 "Download the database as a JSON file",
             )
@@ -385,7 +437,7 @@ def admin_panel():
 
                 # Collect last 5 questions with discussions
                 qs = sorted(
-                    [q_ for exo in db()[q.user] for q_ in exo if q_.messages and q_ is not q],
+                    [q_ for q_ in db()[q.user].all_questions() if q_.messages and q_ is not q],
                     key=lambda q: q.last_message_time,
                     reverse=True,
                 )[:5]
@@ -453,9 +505,9 @@ def main():
         st.write(f"Welcome {user}!")
 
     # Create a new user if it doesn't exist
-    db().login(user)
+    db().login(user, "")
 
-    for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user])):
+    for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user].exos)):
         anchor = f"<a name='exo-{i+1}'></a>\n"
         st.write(anchor + exo.instructions, unsafe_allow_html=True)
 
@@ -481,7 +533,7 @@ def main():
     with st.sidebar:
         st.write("*Table of contents*")
         toc = ""
-        for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user])):
+        for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user].exos)):
             # First line with a # is the title
             header = next(
                 (line for line in exo.instructions.splitlines() if line.strip().startswith("#")),
@@ -515,8 +567,8 @@ def main():
         sleep(0.5)
 
         # Show the timer for the current question
-        done = [q for exo in db()[user] for q in exo if q.messages]
-        to_do = [q for exo in db()[user] for q in exo if not q.messages]
+        done = [q for q in db()[user].all_questions() if q.messages]
+        to_do = [q for q in db()[user].all_questions() if not q.messages]
 
         if not done or not to_do or to_do[0].full_exo.disable_timer:
             continue
