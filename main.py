@@ -132,15 +132,19 @@ class User:
         return [q for exo in self.exos for q in exo]
 
 
-class DataBase(dict[str, User]):
+@dataclass
+class DataBase:
     """
     The database is a dictionary of users, each user has a list of exercises, each exercise has a list of questions.
     """
 
+    users: dict[str, User] = field(default_factory=dict)
+    teacher_password: str | None = None
+    version: int = 2
+
     def reload(self, path: Path) -> Self:
         other = DataBase.from_json(json.loads(path.read_text()))
-        self.clear()
-        self.update(other)
+        self.__dict__.update(other.__dict__)
         return self
 
     def save(self, path: Path) -> None:
@@ -148,9 +152,14 @@ class DataBase(dict[str, User]):
 
     def login(self, user: str, password: str) -> bool:
         """Create a new user if it doesn't exist"""
-        if user not in self:
-            self[user] = User(user, password)
-        elif self[user].password != password:
+        if user == TEACHER_NAME:
+            if self.teacher_password is None:
+                self.teacher_password = password
+            return self.teacher_password == password
+        if user not in self.users:
+            # Create a new account
+            self.users[user] = User(user, password)
+        elif self.users[user].password != password:
             return False
         return True
 
@@ -160,10 +169,10 @@ class DataBase(dict[str, User]):
         return need_response
 
     def questions_done(self, user: str) -> int:
-        return sum(1 for q in self[user].all_questions() if q.messages)
+        return sum(1 for q in self.users[user].all_questions() if q.messages)
 
     def all_questions(self) -> list[Question]:
-        return [q for user in self.values() for q in user.all_questions()]
+        return [q for user in self.users.values() for q in user.all_questions()]
 
     def answer_times(self, last_n: int | None = None) -> list[float]:
         """Return the mean time it takes for the teacher to answer a question."""
@@ -209,9 +218,10 @@ class DataBase(dict[str, User]):
     def from_json(cls, data: dict) -> Self:
         if isinstance(next(iter(data.values()), None), list):
             # This was the first format, where the users were stored as just the list of their questions
-            data = {k: dict(name=k, password="", exos=v) for k, v in data.items()}
-            print("Converting old format to new format")
-        return cls({k: dict_to_dataclass(User, v) for k, v in data.items()})
+            users = {k: dict(name=k, password="", exos=v) for k, v in data.items()}
+            data = dict(users=users, teacher_password=None)
+            print(f"Converting v1 format to v{cls.version}")
+        return dict_to_dataclass(cls, data)
 
     def to_json(self) -> dict:
         return dataclass_to_dict(self)
@@ -231,8 +241,12 @@ def dataclass_to_dict(obj: Any) -> Any:
 def dict_to_dataclass[T](cls: Type[T], data: Any) -> T:
     try:
         if isinstance(data, dict):
-            fieldtypes = {f.name: f.type for f in fields(cls)}
-            return cls(**{f: dict_to_dataclass(fieldtypes[f], data[f]) for f in data})
+            if is_dataclass(cls):
+                fieldtypes = {f.name: f.type for f in fields(cls)}
+                return cls(**{f: dict_to_dataclass(fieldtypes[f], data[f]) for f in data})
+            else:
+                # It can also just be a simple dict
+                return cls(**{k: dict_to_dataclass(cls.__args__[1], v) for k, v in data.items()})
         elif isinstance(data, list):
             elem_type = cls.__args__[0]
             return [dict_to_dataclass(elem_type, i) for i in data]
@@ -310,8 +324,8 @@ def admin_panel():
         model = st.selectbox("OpenAI model", MODELS)
 
         txt = "## Participants\n"
-        if db():
-            for u in db():
+        if db().users:
+            for u in db().users:
                 txt += f"- **{u}** ({db().questions_done(u)}/{NUM_QUESTIONS})\n"
         else:
             txt += "No participants yet"
@@ -333,7 +347,7 @@ def admin_panel():
             st.altair_chart(hist, use_container_width=True)
 
         with st.expander("⚙ Database"):
-            st.button("Wipe database", on_click=lambda: db().clear())
+            st.button("Wipe database", on_click=lambda: db().users.clear())
             st.download_button(
                 "Download current database",
                 json.dumps(db().to_json(), indent=2),
@@ -370,13 +384,13 @@ def admin_panel():
                 st.write(
                     f"""
                 ### Backup info
-                {', '.join(f'**{u}** ({new_db.questions_done(u)}/{NUM_QUESTIONS})' for u in new_db) or 'empty'}
-                         """
+                {', '.join(f'**{u}** ({new_db.questions_done(u)}/{NUM_QUESTIONS})' for u in new_db.users) or 'empty'}
+                    """
                 )
 
                 if st.button(f"⚠ Load backup from {label}"):
-                    db().clear()
-                    db().update(new_db)
+                    db().users.clear()
+                    db().users.update(new_db.users)
 
         # Update the source code code.
         with st.expander("🛠 Source code"):
@@ -437,7 +451,11 @@ def admin_panel():
 
                 # Collect last 5 questions with discussions
                 qs = sorted(
-                    [q_ for q_ in db()[q.user].all_questions() if q_.messages and q_ is not q],
+                    [
+                        q_
+                        for q_ in db().users[q.user].all_questions()
+                        if q_.messages and q_ is not q
+                    ],
                     key=lambda q: q.last_message_time,
                     reverse=True,
                 )[:5]
@@ -488,26 +506,13 @@ def admin_panel():
         sleep(0.5)
 
 
-def main():
-    user = st.session_state.get("user")
+def student_panel(username):
+    user = db().users[username]
 
-    if user is None:
-        # Prompt for user name
-        user = st.text_input("Your name")
-        if not user:
-            return
-        st.session_state.user = user
-        st.rerun()  # So we remove the text input
-    elif user == TEACHER_NAME:
-        admin_panel()
-        return
-    else:
-        st.write(f"Welcome {user}!")
+    st.write("# Effectively Handling Disagreements")
+    st.write(f"Welcome {username}!")
 
-    # Create a new user if it doesn't exist
-    db().login(user, "")
-
-    for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user].exos)):
+    for i, (exo, qs) in enumerate(zip(EXERCISES, user.exos)):
         anchor = f"<a name='exo-{i+1}'></a>\n"
         st.write(anchor + exo.instructions, unsafe_allow_html=True)
 
@@ -515,13 +520,13 @@ def main():
             st.markdown(f"### Variation {i+1}\n{variation}")
 
             with st.container():
-                st.write(q.fmt_messages(user))
+                st.write(q.fmt_messages(username))
                 if len(q.messages) != 1 and (new := st.chat_input(key=f"chat-{q.uid}")):
-                    q.messages.append(Message(user, new))
+                    q.messages.append(Message(username, new))
                     st.rerun()
 
             # If there was never any feedback, don't show the following questions
-            if user == "D":
+            if username == "D":
                 continue
             if q.never_got_feedback:
                 break
@@ -533,7 +538,7 @@ def main():
     with st.sidebar:
         st.write("*Table of contents*")
         toc = ""
-        for i, (exo, qs) in enumerate(zip(EXERCISES, db()[user].exos)):
+        for i, (exo, qs) in enumerate(zip(EXERCISES, user.exos)):
             # First line with a # is the title
             header = next(
                 (line for line in exo.instructions.splitlines() if line.strip().startswith("#")),
@@ -553,22 +558,22 @@ def main():
 
         st.markdown(toc)
 
-        st.metric("Progress", f"{db().questions_done(user)}/{NUM_QUESTIONS}")
+        st.metric("Progress", f"{db().questions_done(username)}/{NUM_QUESTIONS}")
 
     with st.sidebar:
         timer = st.empty()
     last_snow = 0
 
     # Check for new messages every second
-    past_msgs = deepcopy(db()[user])
+    past_msgs = deepcopy(user)
     while True:
-        if past_msgs != db()[user]:
+        if past_msgs != user:
             st.rerun()
         sleep(0.5)
 
         # Show the timer for the current question
-        done = [q for q in db()[user].all_questions() if q.messages]
-        to_do = [q for q in db()[user].all_questions() if not q.messages]
+        done = [q for q in user.all_questions() if q.messages]
+        to_do = [q for q in user.all_questions() if not q.messages]
 
         if not done or not to_do or to_do[0].full_exo.disable_timer:
             continue
@@ -585,6 +590,35 @@ def main():
                 last_snow = time()
                 st.snow()
                 st.toast("Time's up, try to submit :)")
+
+
+def main():
+    username = st.session_state.get("username")
+
+    if username is None:
+        st.write("# Effectively Handling Disagreements")
+        with st.form(key="login"):
+            username = st.text_input("Your name")
+            password = st.text_input("Optional password")
+            st.write(
+                "*Do **not** use a password you use elsewhere, make one up for the next 2 hours*"
+            )
+            submit = st.form_submit_button("Login")
+
+        if submit:
+            if db().login(username, password):
+                st.session_state.username = username
+            else:
+                st.error("Wrong login/password, try again.")
+                sleep(1)
+            st.rerun()  # So we remove the text input on login
+        else:
+            return
+
+    elif username == TEACHER_NAME:
+        admin_panel()
+    else:
+        student_panel(username)
 
 
 if __name__ == "__main__":
