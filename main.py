@@ -17,9 +17,9 @@ import altair as alt
 import pandas as pd
 
 MODELS = [
-    None,
     "gpt-4o",
-    "gpt-3.5-turbo-0125",
+    "gpt-4o-mini",
+    None,
 ]
 TEACHER_NAME = "Camille"
 
