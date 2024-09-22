@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from time import sleep, time
 import traceback
-from typing import Any, Self, Type
+from typing import Any, Self, Type, TypeVar
 import uuid
 import streamlit as st
 import openai
@@ -238,7 +238,10 @@ def dataclass_to_dict(obj: Any) -> Any:
         return obj
 
 
-def dict_to_dataclass[T](cls: Type[T], data: Any) -> T:
+T = TypeVar("T")
+
+
+def dict_to_dataclass(cls: Type[T], data: Any) -> T:
     try:
         if isinstance(data, dict):
             if is_dataclass(cls):
