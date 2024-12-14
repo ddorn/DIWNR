@@ -1,15 +1,20 @@
-[tool.poetry]
-name = "python-template"
+[project]
+name = "DIWNR"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Diego Dorn", "Camille Berger"]
+requires-python = ">=3.12.0"
+dependencies = [
+    "openai>=1.57.4",
+    "pyyaml>=6.0.2",
+    "streamlit>=1.41.1",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.10.0"
-streamlit = "^1.31.0"
-openai = "^1.11.1"
-pre-commit = "^3.6.2"
-pyyaml = "^6.0.1"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.0.1",
+]
 
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
@@ -20,7 +25,3 @@ exclude = [".cache"]
 # https://beta.ruff.rs/docs/configuration/
 select = ['E', 'W', 'F', 'I', 'B', 'C4', 'ARG', 'SIM']
 ignore = ['W291', 'W292', 'W293']
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
