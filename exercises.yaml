@@ -397,8 +397,8 @@ system_prompt: |
 
   ---
   ⚙️Transfers are relatively simple. Psychologists usually categorize reasoning into different uses, called prospective and retrospective.
-  -Prospective reasoning. It includes inquiry, argumentation, prediction.
-  -Retrospective reasoning. It includes explanation and justification
+  - Prospective reasoning. It includes inquiry, argumentation, prediction.
+  - Retrospective reasoning. It includes explanation and justification
 
   Descriptively speaking, these uses are debatable. However, they offer you a good test. You can indeed test if assertions in one use transfer to the other use, e.g: IL:”Immigrants want to replace us” Q:”So, if I give you the name of someone who does not want to replace us, then you’ll be able to systematically guess that it’s not an immigrant ?”
 
@@ -546,11 +546,11 @@ instructions: |
   - In the original Data, there is usually an entity or event (e.g breaking one's nail), and an acompanying property or related event (e.g. "after doing something bad").
   - We can distinguish two kinds of properties/related events: 
     - Essential properties/events: they could not have been/happened otheriwse (e.g, "big" in "the pyramids of Giza are big", "after I was born")
-    -Accidental properties/events: they could have been otherwise (e.g. "after doing something bad", it could have been "after not doing anything bad". Not doing bad things isn't a stretch of the imagination)
+    - Accidental properties/events: they could have been otherwise (e.g. "after doing something bad", it could have been "after not doing anything bad". Not doing bad things isn't a stretch of the imagination)
 
-  -If the property is accidental, it's usually enough to search with your conversation partner for another example that doesn't share this property, but leads to the same result ("not doing anything bad, yet breaking one's nail"), or that shares this property, but leads to a different result ("doing something bad, but not breaking one's nail"). This other example will be the alternative.
+  - If the property is accidental, it's usually enough to search with your conversation partner for another example that doesn't share this property, but leads to the same result ("not doing anything bad, yet breaking one's nail"), or that shares this property, but leads to a different result ("doing something bad, but not breaking one's nail"). This other example will be the alternative.
   
-  -If the property is essential, it's often better to search for an example of the initial entitie's superclass. For example, "big Pyramid" is part of the superclass "big monuments". "After I was born" is part of the superclass "personal life events" You can then apply the same logic as above.
+   - If the property is essential, it's often better to search for an example of the initial entitie's superclass. For example, "big Pyramid" is part of the superclass "big monuments". "After I was born" is part of the superclass "personal life events" You can then apply the same logic as above.
 
 variations:
   - |
@@ -614,11 +614,11 @@ system_prompt: |
   - In the original Data, there is usually an entity or event (e.g breaking one's nail), and an acompanying property or related event (e.g. "after doing something bad").
   - We can distinguish two kinds of properties/related events: 
     - Essential properties/events: they could not have been/happened otheriwse (e.g, "big" in "the pyramids of Giza are big", "after I was born")
-    -Accidental properties/events: they could have been otherwise (e.g. "after doing something bad", it could have been "after not doing anything bad". Not doing bad things isn't a stretch of the imagination)
+    - Accidental properties/events: they could have been otherwise (e.g. "after doing something bad", it could have been "after not doing anything bad". Not doing bad things isn't a stretch of the imagination)
 
-  -If the property is accidental, it's usually enough to search with your conversation partner for another example that doesn't share this property, but leads to the same result ("not doing anything bad, yet breaking one's nail"), or that shares this property, but leads to a different result ("doing something bad, but not breaking one's nail"). This other example will be the alternative.
+  - If the property is accidental, it's usually enough to search with your conversation partner for another example that doesn't share this property, but leads to the same result ("not doing anything bad, yet breaking one's nail"), or that shares this property, but leads to a different result ("doing something bad, but not breaking one's nail"). This other example will be the alternative.
 
-  -If the property is essential, it's often better to search for an example of the initial entitie's superclass. For example, "big Pyramid" is part of the superclass "big monuments". "After I was born" is part of the superclass "personal life events" You can then apply the same logic as above.
+  - If the property is essential, it's often better to search for an example of the initial entitie's superclass. For example, "big Pyramid" is part of the superclass "big monuments". "After I was born" is part of the superclass "personal life events" You can then apply the same logic as above.
   ----
   Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 
