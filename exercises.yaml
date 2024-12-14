@@ -534,11 +534,23 @@ instructions: |
 
   Claim: “I believe in Karma.”
   Data: “When I do something bad, like littering, I get karmically punished during the day - I’ll break a nail, for example”. (Implicit Warrant: I can trust my personal experiences)
-  Transformed Data: “Suppose you do only good things throughout the day, you don’t litter, but you break a nail during that day. How do you call that?”
+  Transformed Data: “Suppose you do only good things throughout the day, you don’t litter, but you break a nail during that day. How do you call that?” "-Things happen?"
 
   Once the Data is transformed, the IL usually gives it a name. We call this “eliciting an alternative”. You want the transformed data to be an alternative to the IL’s claim, but you don’t suggest it directly - instead, you try to get the IL to name it for you - you elicit it.
+  
+  Once the transformed Data has a name, you can contrast it with the original one, such as "How do you make the distinction between 'Things happen' and 'Karmic punishment'?"
 
   These moves are key to a successful conversation when it bears on matter-of-fact beliefs. Since they are so crucial, the next section is about practicing these very moves.
+
+  Let's give them a closer look. Most of them work the following way: 
+  - In the original Data, there is usually an entity or event (e.g breaking one's nail), and an acompanying property or related event (e.g. "after doing something bad").
+  - We can distinguish two kinds of properties/related events: 
+    - Essential properties/events: they could not have been/happened otheriwse (e.g, "big" in "the pyramids of Giza are big", "after I was born")
+    -Accidental properties/events: they could have been otherwise (e.g. "after doing something bad", it could have been "after not doing anything bad". Not doing bad things isn't a stretch of the imagination)
+
+  -If the property is accidental, it's usually enough to search with your conversation partner for another example that doesn't share this property, but leads to the same result ("not doing anything bad, yet breaking one's nail"), or that shares this property, but leads to a different result ("doing something bad, but not breaking one's nail"). This other example will be the alternative.
+  
+  -If the property is essential, it's often better to search for an example of the initial entitie's superclass. For example, "big Pyramid" is part of the superclass "big monuments". "After I was born" is part of the superclass "personal life events" You can then apply the same logic as above.
 
 variations:
   - |
@@ -594,9 +606,19 @@ system_prompt: |
   Transformed Data: “Suppose you do only good things throughout the day, you don’t litter, but you break a nail during that day. How do you call that?”
 
   Step 3: Contrasting with the alternative
-  Once the Data is transformed, the IL usually gives it a name. We call this “eliciting an alternative”. You want the transformed data to be an alternative to the IL’s claim, but you don’t suggest it directly - instead, you try to get the IL to name it for you - you elicit it.
+  Once the Data is transformed, the IL usually gives it a name. We call this “eliciting an alternative”. You want the transformed data to be an alternative to the IL’s claim, but you don’t suggest it directly - instead, you try to get the IL to name it for you - you elicit it. Once the transformed Data has a name, you can contrast it with the original one, such as "How do you make the distinction between the two?".
 
   These moves are key to a successful conversation when it bears on matter-of-fact beliefs. Since they are so crucial, the next section is about practicing these very moves.
+
+  Let's give them a closer look. Most of them work the following way: 
+  - In the original Data, there is usually an entity or event (e.g breaking one's nail), and an acompanying property or related event (e.g. "after doing something bad").
+  - We can distinguish two kinds of properties/related events: 
+    - Essential properties/events: they could not have been/happened otheriwse (e.g, "big" in "the pyramids of Giza are big", "after I was born")
+    -Accidental properties/events: they could have been otherwise (e.g. "after doing something bad", it could have been "after not doing anything bad". Not doing bad things isn't a stretch of the imagination)
+
+  -If the property is accidental, it's usually enough to search with your conversation partner for another example that doesn't share this property, but leads to the same result ("not doing anything bad, yet breaking one's nail"), or that shares this property, but leads to a different result ("doing something bad, but not breaking one's nail"). This other example will be the alternative.
+
+  -If the property is essential, it's often better to search for an example of the initial entitie's superclass. For example, "big Pyramid" is part of the superclass "big monuments". "After I was born" is part of the superclass "personal life events" You can then apply the same logic as above.
   ----
   Your task as an assistant is to provide them with feedback to improve on their rephrasing. Be concise.
 
