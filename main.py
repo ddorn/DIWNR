@@ -15,6 +15,9 @@ from openai.types.chat import ChatCompletionMessageParam
 import yaml
 import altair as alt
 import pandas as pd
+from dotenv import load_dotenv
+
+load_dotenv()
 
 MODELS = [
     "gpt-4o",
