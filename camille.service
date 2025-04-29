@@ -1,0 +1,10 @@
+[Unit]
+Description=Streamlit app for camille's workshop
+After=network.target
+
+[Service]
+WorkingDirectory=/srv/camille
+ExecStart=/root/.local/bin/uv run streamlit run main.py --server.port 8500
+
+[Install]
+WantedBy=multi-user.target
