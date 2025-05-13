@@ -1,30 +1,36 @@
-import os
-from copy import deepcopy
-from dataclasses import asdict, field, dataclass, fields, is_dataclass
 import dataclasses
-from datetime import datetime
 import json
+import os
+import traceback
+import uuid
+from copy import deepcopy
+from dataclasses import asdict, dataclass, field, fields, is_dataclass
+from datetime import datetime
 from pathlib import Path
 from time import sleep, time
-import traceback
 from typing import Any, Self, Type, TypeVar
-import uuid
-import streamlit as st
-import openai
-from openai.types.chat import ChatCompletionMessageParam
-import yaml
+
 import altair as alt
+import openai
 import pandas as pd
+import streamlit as st
+import yaml
 from dotenv import load_dotenv
+from openai.types.chat import ChatCompletionMessageParam
 
 load_dotenv()
 
 MODELS = [
+    "gpt-4.1",
+    "gpt-4.1-mini",
     "gpt-4o",
     "gpt-4o-mini",
     None,
 ]
+AUTOMATIC_MODE_MODEL = "gpt-4.1"
 TEACHER_NAME = "Camille"
+LLM_NAME = "LLM"
+TEACHER_NAMES = [TEACHER_NAME, "LLM"]
 
 BACKUP_DIR = Path("backups")
 BACKUP_DIR.mkdir(exist_ok=True)
@@ -86,14 +92,14 @@ class Question:
         # Return the timestamp of the first non-teacher message that doesn't have a response and is not skipped
         t = None
         for msg in self.messages[::-1]:
-            if msg.user == TEACHER_NAME or msg.skipped_by_teacher:
+            if msg.user in TEACHER_NAMES or msg.skipped_by_teacher:
                 return t
             t = msg.timestamp
         return t
 
     @property
     def never_got_feedback(self):
-        return all(msg.user != TEACHER_NAME for msg in self.messages)
+        return all(msg.user not in TEACHER_NAMES for msg in self.messages)
 
     def fmt_messages(self, user: str):
         return "  \n".join(
@@ -291,7 +297,7 @@ def db() -> DataBase:
 
 
 @st.cache_data()
-def get_openai_feedback(original: str, submission: str, exo: Exercise, model: str) -> str | None:
+def get_llm_feedback(original: str, submission: str, exo: Exercise, model: str) -> str | None:
 
     def fmt(orig: str, sub: str):
         return f"Original: {orig}\nResponse: {sub}"
@@ -439,7 +445,11 @@ def admin_panel():
 
     st.write("# Feedback panel")
 
-    for q in db().questions_needing_feedback():
+    questions_to_answer = db().questions_needing_feedback()
+    if not questions_to_answer:
+        st.write("No questions needing feedback")
+
+    for q in questions_to_answer:
         exo = EXERCISES[q.exo]
         variation = exo.variations[q.variation]
 
@@ -477,7 +487,7 @@ def admin_panel():
             st.write(q.fmt_messages(TEACHER_NAME))
 
             if q.never_got_feedback and model:
-                default = get_openai_feedback(
+                default = get_llm_feedback(
                     variation, q.messages[0].content, EXERCISES[q.exo], model
                 )
             elif q.never_got_feedback:
@@ -515,8 +525,15 @@ def admin_panel():
 def student_panel(username):
     user = db().users[username]
 
+    automatic_mode = st.query_params.get("automatic_mode", False)
+
     st.write("# Effectively Handling Disagreements")
     st.write(f"Welcome {username}!")
+
+    if automatic_mode:
+        st.info(
+            f"You are in automatic mode. You will get feedback imediately from an LLM (here, {AUTOMATIC_MODE_MODEL})."
+        )
 
     for i, (exo, qs) in enumerate(zip(EXERCISES, user.exos)):
         anchor = f"<a name='exo-{i+1}'></a>\n"
@@ -528,7 +545,12 @@ def student_panel(username):
             with st.container():
                 st.write(q.fmt_messages(username))
                 if len(q.messages) != 1 and (new := st.chat_input(key=f"chat-{q.uid}")):
-                    q.messages.append(Message(username, new))
+                    msg = Message(username, new)
+                    q.messages.append(msg)
+                    # If the user is in automatic mode, we directly use gpt for feedback
+                    if automatic_mode:
+                        answer = get_llm_feedback(variation, msg.content, exo, AUTOMATIC_MODE_MODEL)
+                        q.messages.append(Message(LLM_NAME, answer))
                     st.rerun()
 
             # If there was never any feedback, don't show the following questions

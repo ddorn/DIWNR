@@ -10,7 +10,7 @@ run-server:
 
 deploy:
 	git ls-files | rsync -avzP --files-from=- . pine:$(DEPLOY_DIR)
-	ssh pine "cd $(DEPLOY_DIR) && make copy-service-and-restart"
+	ssh pine "cd $(DEPLOY_DIR) && make copy-service-and-restart && journalctl -u camille -f"
 
 copy-service-and-restart:
 	cp ./camille.service /etc/systemd/system/
