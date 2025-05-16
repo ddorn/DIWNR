@@ -405,23 +405,23 @@ def admin_panel():
                     db().users.update(new_db.users)
 
         # Update the source code code.
-        with st.expander("🛠 Source code"):
-            modif_timestamp = os.path.getmtime("main.py")
-            st.write(f"Last code change: {datetime.fromtimestamp(modif_timestamp):%c}")
+        # with st.expander("🛠 Source code"):
+        #     modif_timestamp = os.path.getmtime("main.py")
+        #     st.write(f"Last code change: {datetime.fromtimestamp(modif_timestamp):%c}")
 
-            last_commits = os.popen("git log --oneline -n 3").read().strip()
-            # Remove the hashes, add bullet points
-            last_commits = "\n- ".join(line.partition(" ")[2] for line in last_commits.splitlines())
-            st.write(f"Last 3 commits:\n- {last_commits}")
+        #     last_commits = os.popen("git log --oneline -n 3").read().strip()
+        #     # Remove the hashes, add bullet points
+        #     last_commits = "\n- ".join(line.partition(" ")[2] for line in last_commits.splitlines())
+        #     st.write(f"Last 3 commits:\n- {last_commits}")
 
-            st.warning(
-                "When pulling, if the code [in the github](https://github.com/ddorn/DIWNR) is broken, the app will be broken too until Diego's intervention on the server."
-            )
-            if st.button("Pull latest version"):
-                with st.spinner("running `git pull`..."):
-                    output = os.popen("git pull").read()
-                st.code(output)
-                st.write("Please refresh the page to see the changes, if any.")
+        #     st.warning(
+        #         "When pulling, if the code [in the github](https://github.com/ddorn/DIWNR) is broken, the app will be broken too until Diego's intervention on the server."
+        #     )
+        #     if st.button("Pull latest version"):
+        #         with st.spinner("running `git pull`..."):
+        #             output = os.popen("git pull").read()
+        #         st.code(output)
+        #         st.write("Please refresh the page to see the changes, if any.")
 
         preview_exos = st.toggle("Preview exercises")
 
